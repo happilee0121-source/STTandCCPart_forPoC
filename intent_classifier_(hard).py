@@ -1,12 +1,12 @@
 """
 Layer 3. Semantic NLP Layer
 
-ÁÖ¿ä ±â´É:
-1. ÇÑ±¹¾î ÇüÅÂ¼Ò ºĞ¼® (spaCy/NLTK ´ëÃ¼)
-2. ÀÇµµ ºĞ·ù (´ÙÃş ºĞ·ù ¸ğµ¨)
-3. °¨Á¤ ºĞ¼®
-4. ÇÙ½É Å°¿öµå ÃßÃâ
-5. ¹ßÈ­ °£ °ü°è ºĞ¼®
+ì£¼ìš” ê¸°ëŠ¥:
+1. í•œêµ­ì–´ í˜•íƒœì†Œ ë¶„ì„ (spaCy/NLTK ëŒ€ì²´)
+2. ì˜ë„ ë¶„ë¥˜ (ë‹¤ì¸µ ë¶„ë¥˜ ëª¨ë¸)
+3. ê°ì • ë¶„ì„
+4. í•µì‹¬ í‚¤ì›Œë“œ ì¶”ì¶œ
+5. ë°œí™” ê°„ ê´€ê³„ ë¶„ì„
 """
 
 import json
@@ -19,14 +19,14 @@ from collections import Counter, defaultdict
 
 @dataclass
 class Intent:
-    """ÀÇµµ ºĞ¼® °á°ú ±¸Á¶"""
+    """ì˜ë„ ë¶„ì„ ê²°ê³¼ êµ¬ì¡°"""
     utterance_id: str
     intent_id: str
     intent_type: str
     confidence: float
-    sub_intent: Optional[str] = None  # ¼¼ºÎ ÀÇµµ
-    sentiment: Optional[str] = None  # °¨Á¤ (positive/neutral/negative)
-    keywords: List[str] = None  # ÇÙ½É Å°¿öµå
+    sub_intent: Optional[str] = None  # ì„¸ë¶€ ì˜ë„
+    sentiment: Optional[str] = None  # ê°ì • (positive/neutral/negative)
+    keywords: List[str] = None  # í•µì‹¬ í‚¤ì›Œë“œ
     
     def __post_init__(self):
         if self.keywords is None:
@@ -37,44 +37,44 @@ class Intent:
 
 
 class KoreanMorphAnalyzer:
-    """ÇÑ±¹¾î ÇüÅÂ¼Ò ºĞ¼®±â (°£ÀÌ ¹öÀü)"""
+    """í•œêµ­ì–´ í˜•íƒœì†Œ ë¶„ì„ê¸° (ê°„ì´ ë²„ì „)"""
     
     def __init__(self):
-        # Á¶»ç ¸ñ·Ï
+        # ì¡°ì‚¬ ëª©ë¡
         self.josa = [
-            'ÀÌ', '°¡', 'À»', '¸¦', 'Àº', '´Â', 'ÀÇ', '¿¡', '¿¡¼­', 'À¸·Î', '·Î',
-            '°ú', '¿Í', 'µµ', '¸¸', 'ºÎÅÍ', '±îÁö', '²²¼­', '¿¡°Ô', 'ÇÑÅ×'
+            'ì´', 'ê°€', 'ì„', 'ë¥¼', 'ì€', 'ëŠ”', 'ì˜', 'ì—', 'ì—ì„œ', 'ìœ¼ë¡œ', 'ë¡œ',
+            'ê³¼', 'ì™€', 'ë„', 'ë§Œ', 'ë¶€í„°', 'ê¹Œì§€', 'ê»˜ì„œ', 'ì—ê²Œ', 'í•œí…Œ'
         ]
         
-        # ¾î¹Ì ÆĞÅÏ
+        # ì–´ë¯¸ íŒ¨í„´
         self.eomi_patterns = [
-            r'½À´Ï´Ù$', r'¤²´Ï´Ù$', r'ÇØ¿ä$', r'¿ä$', r'´Ù$', r'¤²´Ï±î$',
-            r'±î¿ä$', r'ÁÒ$', r'³×¿ä$', r'±º¿ä$', r'¾î¿ä$', r'¾Æ¿ä$'
+            r'ìŠµë‹ˆë‹¤$', r'ã…‚ë‹ˆë‹¤$', r'í•´ìš”$', r'ìš”$', r'ë‹¤$', r'ã…‚ë‹ˆê¹Œ$',
+            r'ê¹Œìš”$', r'ì£ $', r'ë„¤ìš”$', r'êµ°ìš”$', r'ì–´ìš”$', r'ì•„ìš”$'
         ]
     
     def extract_stem(self, word: str) -> str:
-        """¾î°£ ÃßÃâ (°£´ÜÇÑ ±ÔÄ¢ ±â¹İ)"""
-        # Á¶»ç Á¦°Å
+        """ì–´ê°„ ì¶”ì¶œ (ê°„ë‹¨í•œ ê·œì¹™ ê¸°ë°˜)"""
+        # ì¡°ì‚¬ ì œê±°
         for j in sorted(self.josa, key=len, reverse=True):
             if word.endswith(j) and len(word) > len(j):
                 word = word[:-len(j)]
                 break
         
-        # ¾î¹Ì Á¦°Å
+        # ì–´ë¯¸ ì œê±°
         for pattern in self.eomi_patterns:
             word = re.sub(pattern, '', word)
         
         return word
     
     def tokenize(self, text: str) -> List[str]:
-        """°£´ÜÇÑ ÅäÅ«È­"""
-        # °ø¹é ±âÁØ ºĞ¸®
+        """ê°„ë‹¨í•œ í† í°í™”"""
+        # ê³µë°± ê¸°ì¤€ ë¶„ë¦¬
         tokens = text.split()
         
-        # ±¸µÎÁ¡ ºĞ¸®
+        # êµ¬ë‘ì  ë¶„ë¦¬
         result = []
         for token in tokens:
-            # ±¸µÎÁ¡ÀÌ ºÙ¾îÀÖÀ¸¸é ºĞ¸®
+            # êµ¬ë‘ì ì´ ë¶™ì–´ìˆìœ¼ë©´ ë¶„ë¦¬
             token = re.sub(r'([.,!?])', r' \1', token)
             result.extend(token.split())
         
@@ -82,123 +82,123 @@ class KoreanMorphAnalyzer:
 
 
 class AdvancedIntentClassifier:
-    """°í±Ş ÀÇµµ ºĞ·ù Å¬·¡½º"""
+    """ê³ ê¸‰ ì˜ë„ ë¶„ë¥˜ í´ë˜ìŠ¤"""
     
     def __init__(self, config: Dict):
         self.config = config
         self.intent_types = config['nlp']['intent_types']
         self.morph_analyzer = KoreanMorphAnalyzer()
         
-        # ÀÇµµ ºĞ·ù¸¦ À§ÇÑ È®ÀåµÈ ÆĞÅÏ
+        # ì˜ë„ ë¶„ë¥˜ë¥¼ ìœ„í•œ í™•ì¥ëœ íŒ¨í„´
         self.intent_patterns = {
             'requirement': {
                 'patterns': [
-                    r'ÇØ¾ß\s*(ÇÕ´Ï´Ù|ÇØ¿ä|ÇÑ´Ù|ÇÒ±î¿ä|ÇÏ¸é)',
-                    r'ÇÊ¿äÇÕ´Ï´Ù|ÇÊ¿äÇØ¿ä|ÇÊ¿äÇÏ´Ù',
-                    r'Àû¿ë|¼³Á¤|µµÀÔ|»ç¿ë|±¸Çö',
-                    r'¹İµå½Ã|²À',
-                    r'ÃÖ¼Ò.*ÀÌ»ó',
-                    r'.*ÇÏµµ·Ï\s*(ÇØ¾ß|ÇÏ¸é)',
-                    r'.*°Ô\s*ÇØ¾ß',
-                    r'±ÇÀåÇÕ´Ï´Ù|±ÇÀåÇØ¿ä',
+                    r'í•´ì•¼\s*(í•©ë‹ˆë‹¤|í•´ìš”|í•œë‹¤|í• ê¹Œìš”|í•˜ë©´)',
+                    r'í•„ìš”í•©ë‹ˆë‹¤|í•„ìš”í•´ìš”|í•„ìš”í•˜ë‹¤',
+                    r'ì ìš©|ì„¤ì •|ë„ì…|ì‚¬ìš©|êµ¬í˜„',
+                    r'ë°˜ë“œì‹œ|ê¼­',
+                    r'ìµœì†Œ.*ì´ìƒ',
+                    r'.*í•˜ë„ë¡\s*(í•´ì•¼|í•˜ë©´)',
+                    r'.*ê²Œ\s*í•´ì•¼',
+                    r'ê¶Œì¥í•©ë‹ˆë‹¤|ê¶Œì¥í•´ìš”',
                 ],
-                'keywords': ['Àû¿ë', '¼³Á¤', 'µµÀÔ', 'ÇÊ¿ä', 'ÇØ¾ß', '¹İµå½Ã', '±ÇÀå', '»ç¿ë', '±¸Çö']
+                'keywords': ['ì ìš©', 'ì„¤ì •', 'ë„ì…', 'í•„ìš”', 'í•´ì•¼', 'ë°˜ë“œì‹œ', 'ê¶Œì¥', 'ì‚¬ìš©', 'êµ¬í˜„']
             },
             'question': {
                 'patterns': [
-                    r'¾î¶»°Ô|¾î¶²|¹«¾ù|¹¹',
+                    r'ì–´ë–»ê²Œ|ì–´ë–¤|ë¬´ì—‡|ë­',
                     r'\?$',
-                    r'¾î¶³±î¿ä|µÉ±î¿ä|ÇÒ±î¿ä',
-                    r'°¡´ÉÇÑ°¡¿ä|°¡´ÉÇÒ±î¿ä',
-                    r'¾î¶»°Ô\s*»ı°¢',
+                    r'ì–´ë–¨ê¹Œìš”|ë ê¹Œìš”|í• ê¹Œìš”',
+                    r'ê°€ëŠ¥í•œê°€ìš”|ê°€ëŠ¥í• ê¹Œìš”',
+                    r'ì–´ë–»ê²Œ\s*ìƒê°',
                 ],
-                'keywords': ['¾î¶»°Ô', '¾î¶²', '¹«¾ù', '¹¹', '°¡´É']
+                'keywords': ['ì–´ë–»ê²Œ', 'ì–´ë–¤', 'ë¬´ì—‡', 'ë­', 'ê°€ëŠ¥']
             },
             'agreement': {
                 'patterns': [
-                    r'^³×[,.\s]|^³×$',
-                    r'ÁÁ½À´Ï´Ù|ÁÁ¾Æ¿ä|ÁÁ³×¿ä',
-                    r'¸Â½À´Ï´Ù|¸Â¾Æ¿ä',
-                    r'µ¿ÀÇÇÕ´Ï´Ù|µ¿ÀÇÇØ¿ä',
-                    r'Âù¼ºÇÕ´Ï´Ù|Âù¼ºÇØ¿ä',
-                    r'±×·¸½À´Ï´Ù|±×·¡¿ä',
+                    r'^ë„¤[,.\s]|^ë„¤$',
+                    r'ì¢‹ìŠµë‹ˆë‹¤|ì¢‹ì•„ìš”|ì¢‹ë„¤ìš”',
+                    r'ë§ìŠµë‹ˆë‹¤|ë§ì•„ìš”',
+                    r'ë™ì˜í•©ë‹ˆë‹¤|ë™ì˜í•´ìš”',
+                    r'ì°¬ì„±í•©ë‹ˆë‹¤|ì°¬ì„±í•´ìš”',
+                    r'ê·¸ë ‡ìŠµë‹ˆë‹¤|ê·¸ë˜ìš”',
                 ],
-                'keywords': ['³×', 'ÁÁ', '¸Â', 'µ¿ÀÇ', 'Âù¼º', '±×·¡']
+                'keywords': ['ë„¤', 'ì¢‹', 'ë§', 'ë™ì˜', 'ì°¬ì„±', 'ê·¸ë˜']
             },
             'disagreement': {
                 'patterns': [
-                    r'¾Æ´Ï|¾Æ´Ï¿ä',
-                    r'¹İ´ëÇÕ´Ï´Ù|¹İ´ëÇØ¿ä',
-                    r'¹®Á¦°¡|ÀÌ½´°¡',
-                    r'¿ì·Á|°ÆÁ¤',
-                    r'¾î·Æ½À´Ï´Ù|¾î·Á¿ö¿ä',
+                    r'ì•„ë‹ˆ|ì•„ë‹ˆìš”',
+                    r'ë°˜ëŒ€í•©ë‹ˆë‹¤|ë°˜ëŒ€í•´ìš”',
+                    r'ë¬¸ì œê°€|ì´ìŠˆê°€',
+                    r'ìš°ë ¤|ê±±ì •',
+                    r'ì–´ë µìŠµë‹ˆë‹¤|ì–´ë ¤ì›Œìš”',
                 ],
-                'keywords': ['¾Æ´Ï', '¹İ´ë', '¹®Á¦', '¿ì·Á', '°ÆÁ¤', '¾î·Á']
+                'keywords': ['ì•„ë‹ˆ', 'ë°˜ëŒ€', 'ë¬¸ì œ', 'ìš°ë ¤', 'ê±±ì •', 'ì–´ë ¤']
             },
             'clarification': {
                 'patterns': [
-                    r'Áï|´Ù½Ã\s*¸»ÇÏ¸é',
-                    r'Á¤¸®ÇÏ¸é|¿ä¾àÇÏ¸é',
-                    r'¿¹¸¦\s*µé¸é|¿¹¸¦\s*µé¾î',
-                    r'±¸Ã¼ÀûÀ¸·Î|ÀÚ¼¼È÷',
+                    r'ì¦‰|ë‹¤ì‹œ\s*ë§í•˜ë©´',
+                    r'ì •ë¦¬í•˜ë©´|ìš”ì•½í•˜ë©´',
+                    r'ì˜ˆë¥¼\s*ë“¤ë©´|ì˜ˆë¥¼\s*ë“¤ì–´',
+                    r'êµ¬ì²´ì ìœ¼ë¡œ|ìì„¸íˆ',
                 ],
-                'keywords': ['Áï', 'Á¤¸®', '¿ä¾à', '¿¹¸¦', '±¸Ã¼Àû', 'ÀÚ¼¼È÷']
+                'keywords': ['ì¦‰', 'ì •ë¦¬', 'ìš”ì•½', 'ì˜ˆë¥¼', 'êµ¬ì²´ì ', 'ìì„¸íˆ']
             },
             'suggestion': {
                 'patterns': [
-                    r'Á¦¾È|Á¦¾ÈÇÕ´Ï´Ù|Á¦¾ÈÇØ¿ä',
-                    r'¾î¶³±î¿ä|ÇÏ´Â\s*°Ô\s*¾î¶§¿ä',
-                    r'»ı°¢ÇÕ´Ï´Ù|»ı°¢ÇØ¿ä',
-                    r'.*ÇÏ¸é\s*ÁÁÀ»\s*°Í\s*°°',
+                    r'ì œì•ˆ|ì œì•ˆí•©ë‹ˆë‹¤|ì œì•ˆí•´ìš”',
+                    r'ì–´ë–¨ê¹Œìš”|í•˜ëŠ”\s*ê²Œ\s*ì–´ë•Œìš”',
+                    r'ìƒê°í•©ë‹ˆë‹¤|ìƒê°í•´ìš”',
+                    r'.*í•˜ë©´\s*ì¢‹ì„\s*ê²ƒ\s*ê°™',
                 ],
-                'keywords': ['Á¦¾È', '»ı°¢', 'ÁÁÀ»', '¾î¶³±î']
+                'keywords': ['ì œì•ˆ', 'ìƒê°', 'ì¢‹ì„', 'ì–´ë–¨ê¹Œ']
             },
             'objection': {
                 'patterns': [
-                    r'ÇÏÁö¸¸|±×·¯³ª|±×·±µ¥',
-                    r'¹®Á¦´Â',
-                    r'°í·ÁÇØ¾ß|°ËÅäÇØ¾ß',
+                    r'í•˜ì§€ë§Œ|ê·¸ëŸ¬ë‚˜|ê·¸ëŸ°ë°',
+                    r'ë¬¸ì œëŠ”',
+                    r'ê³ ë ¤í•´ì•¼|ê²€í† í•´ì•¼',
                 ],
-                'keywords': ['ÇÏÁö¸¸', '±×·¯³ª', '±×·±µ¥', '¹®Á¦', '°í·Á', '°ËÅä']
+                'keywords': ['í•˜ì§€ë§Œ', 'ê·¸ëŸ¬ë‚˜', 'ê·¸ëŸ°ë°', 'ë¬¸ì œ', 'ê³ ë ¤', 'ê²€í† ']
             }
         }
         
-        # °¨Á¤ ºĞ¼® ÆĞÅÏ
+        # ê°ì • ë¶„ì„ íŒ¨í„´
         self.sentiment_patterns = {
             'positive': [
-                'ÁÁ', 'ÈÇ¸¢', '¿Ïº®', 'ÃÖ°í', 'Å¹¿ù', '¿ì¼ö', 'È¿°úÀû', '±àÁ¤',
-                '¸¸Á·', '¼º°ø', 'Çâ»ó', '°³¼±'
+                'ì¢‹', 'í›Œë¥­', 'ì™„ë²½', 'ìµœê³ ', 'íƒì›”', 'ìš°ìˆ˜', 'íš¨ê³¼ì ', 'ê¸ì •',
+                'ë§Œì¡±', 'ì„±ê³µ', 'í–¥ìƒ', 'ê°œì„ '
             ],
             'negative': [
-                '³ª»Ú', '¹®Á¦', 'ºÎÁ·', '¾î·Æ', '½ÇÆĞ', '¿ì·Á', '°ÆÁ¤', 'À§Çè',
-                'Ãë¾à', '°áÇÔ', 'ºÒ¸¸', '¹ÌÈí'
+                'ë‚˜ì˜', 'ë¬¸ì œ', 'ë¶€ì¡±', 'ì–´ë µ', 'ì‹¤íŒ¨', 'ìš°ë ¤', 'ê±±ì •', 'ìœ„í—˜',
+                'ì·¨ì•½', 'ê²°í•¨', 'ë¶ˆë§Œ', 'ë¯¸í¡'
             ]
         }
     
     def extract_keywords(self, text: str, top_k: int = 5) -> List[str]:
-        """ÇÙ½É Å°¿öµå ÃßÃâ"""
-        # ÅäÅ«È­
+        """í•µì‹¬ í‚¤ì›Œë“œ ì¶”ì¶œ"""
+        # í† í°í™”
         tokens = self.morph_analyzer.tokenize(text)
         
-        # ºÒ¿ë¾î Á¦°Å (Á¶»ç, ¾î¹Ì, ÂªÀº ´Ü¾î)
-        stopwords = ['±×', 'ÀÌ', 'Àú', '°Í', '¼ö', 'µî', '¹×', '¶ÇÇÑ', 'ÇÏ´Â', 'ÀÖ´Â']
+        # ë¶ˆìš©ì–´ ì œê±° (ì¡°ì‚¬, ì–´ë¯¸, ì§§ì€ ë‹¨ì–´)
+        stopwords = ['ê·¸', 'ì´', 'ì €', 'ê²ƒ', 'ìˆ˜', 'ë“±', 'ë°', 'ë˜í•œ', 'í•˜ëŠ”', 'ìˆëŠ”']
         
         filtered = []
         for token in tokens:
-            # ±¸µÎÁ¡ Á¦°Å
+            # êµ¬ë‘ì  ì œê±°
             if token in '.,!?':
                 continue
-            # ºÒ¿ë¾î Á¦°Å
+            # ë¶ˆìš©ì–´ ì œê±°
             if token in stopwords:
                 continue
-            # 2±ÛÀÚ ÀÌ»ó¸¸
+            # 2ê¸€ì ì´ìƒë§Œ
             if len(token) >= 2:
-                # ¾î°£ ÃßÃâ
+                # ì–´ê°„ ì¶”ì¶œ
                 stem = self.morph_analyzer.extract_stem(token)
                 if len(stem) >= 2:
                     filtered.append(stem)
         
-        # ºóµµ ±â¹İ »óÀ§ Å°¿öµå ÃßÃâ
+        # ë¹ˆë„ ê¸°ë°˜ ìƒìœ„ í‚¤ì›Œë“œ ì¶”ì¶œ
         if not filtered:
             return []
         
@@ -208,59 +208,59 @@ class AdvancedIntentClassifier:
         return keywords
     
     def classify_intent(self, text: str) -> Tuple[str, float, Optional[str]]:
-        """ÅØ½ºÆ®ÀÇ ÀÇµµ ºĞ·ù (ÀÇµµ, ½Å·Úµµ, ¼¼ºÎÀÇµµ)"""
+        """í…ìŠ¤íŠ¸ì˜ ì˜ë„ ë¶„ë¥˜ (ì˜ë„, ì‹ ë¢°ë„, ì„¸ë¶€ì˜ë„)"""
         scores = defaultdict(float)
         
-        # °¢ ÀÇµµ Å¸ÀÔº° Á¡¼ö °è»ê
+        # ê° ì˜ë„ íƒ€ì…ë³„ ì ìˆ˜ ê³„ì‚°
         for intent_type, config in self.intent_patterns.items():
             patterns = config['patterns']
             keywords = config.get('keywords', [])
             
-            # ÆĞÅÏ ¸ÅÄª Á¡¼ö
+            # íŒ¨í„´ ë§¤ì¹­ ì ìˆ˜
             pattern_score = 0
             for pattern in patterns:
                 if re.search(pattern, text):
                     pattern_score += 1.0
             
-            # Å°¿öµå ¸ÅÄª Á¡¼ö
+            # í‚¤ì›Œë“œ ë§¤ì¹­ ì ìˆ˜
             keyword_score = 0
             for keyword in keywords:
                 if keyword in text:
                     keyword_score += 0.5
             
-            # °¡ÁßÄ¡ ºÎ¿©
+            # ê°€ì¤‘ì¹˜ ë¶€ì—¬
             total_score = pattern_score * 0.7 + keyword_score * 0.3
             
-            # Á¤±ÔÈ­
+            # ì •ê·œí™”
             if patterns:
                 scores[intent_type] = min(total_score / len(patterns), 1.0)
         
-        # °¡Àå ³ôÀº Á¡¼öÀÇ ÀÇµµ ¼±ÅÃ
+        # ê°€ì¥ ë†’ì€ ì ìˆ˜ì˜ ì˜ë„ ì„ íƒ
         if scores:
             best_intent = max(scores.items(), key=lambda x: x[1])
             intent_type, confidence = best_intent
             
-            # ¼¼ºÎ ÀÇµµ °áÁ¤
+            # ì„¸ë¶€ ì˜ë„ ê²°ì •
             sub_intent = self._determine_sub_intent(text, intent_type)
             
             return intent_type, confidence, sub_intent
         else:
-            return 'requirement', 0.5, None  # ±âº»°ª
+            return 'requirement', 0.5, None  # ê¸°ë³¸ê°’
     
     def _determine_sub_intent(self, text: str, intent_type: str) -> Optional[str]:
-        """¼¼ºÎ ÀÇµµ °áÁ¤"""
+        """ì„¸ë¶€ ì˜ë„ ê²°ì •"""
         if intent_type == 'requirement':
-            if 'ÇÊ¼ö' in text or '¹İµå½Ã' in text:
+            if 'í•„ìˆ˜' in text or 'ë°˜ë“œì‹œ' in text:
                 return 'mandatory'
-            elif '±ÇÀå' in text or 'ÃßÃµ' in text:
+            elif 'ê¶Œì¥' in text or 'ì¶”ì²œ' in text:
                 return 'recommended'
             else:
                 return 'general'
         
         elif intent_type == 'question':
-            if '°¡´É' in text:
+            if 'ê°€ëŠ¥' in text:
                 return 'feasibility'
-            elif '¹æ¹ı' in text or '¾î¶»°Ô' in text:
+            elif 'ë°©ë²•' in text or 'ì–´ë–»ê²Œ' in text:
                 return 'method'
             else:
                 return 'general'
@@ -268,7 +268,7 @@ class AdvancedIntentClassifier:
         return None
     
     def analyze_sentiment(self, text: str) -> str:
-        """°¨Á¤ ºĞ¼®"""
+        """ê°ì • ë¶„ì„"""
         positive_count = sum(1 for word in self.sentiment_patterns['positive'] if word in text)
         negative_count = sum(1 for word in self.sentiment_patterns['negative'] if word in text)
         
@@ -280,22 +280,22 @@ class AdvancedIntentClassifier:
             return 'neutral'
     
     def analyze_utterances(self, utterances: List[Dict]) -> List[Intent]:
-        """¹ßÈ­ ¸®½ºÆ®¿¡ ´ëÇÑ Á¾ÇÕ ºĞ¼®"""
+        """ë°œí™” ë¦¬ìŠ¤íŠ¸ì— ëŒ€í•œ ì¢…í•© ë¶„ì„"""
         intents = []
         
         for idx, utt in enumerate(utterances):
             text = utt['text']
             
-            # ÀÇµµ ºĞ·ù
+            # ì˜ë„ ë¶„ë¥˜
             intent_type, confidence, sub_intent = self.classify_intent(text)
             
-            # °¨Á¤ ºĞ¼®
+            # ê°ì • ë¶„ì„
             sentiment = self.analyze_sentiment(text)
             
-            # Å°¿öµå ÃßÃâ
+            # í‚¤ì›Œë“œ ì¶”ì¶œ
             keywords = self.extract_keywords(text, top_k=5)
             
-            # Intent °´Ã¼ »ı¼º
+            # Intent ê°ì²´ ìƒì„±
             intent = Intent(
                 utterance_id=utt['utterance_id'],
                 intent_id=f"INT_{idx+1:04d}",
@@ -311,7 +311,7 @@ class AdvancedIntentClassifier:
         return intents
     
     def get_intent_distribution(self, intents: List[Intent]) -> Dict:
-        """ÀÇµµ ºĞÆ÷ Åë°è"""
+        """ì˜ë„ ë¶„í¬ í†µê³„"""
         distribution = defaultdict(int)
         sub_intent_dist = defaultdict(int)
         sentiment_dist = defaultdict(int)
@@ -330,7 +330,7 @@ class AdvancedIntentClassifier:
         }
     
     def extract_all_keywords(self, intents: List[Intent]) -> List[Tuple[str, int]]:
-        """ÀüÃ¼ Å°¿öµå ºóµµ ºĞ¼®"""
+        """ì „ì²´ í‚¤ì›Œë“œ ë¹ˆë„ ë¶„ì„"""
         all_keywords = []
         for intent in intents:
             all_keywords.extend(intent.keywords)
@@ -339,7 +339,7 @@ class AdvancedIntentClassifier:
         return counter.most_common(20)
     
     def save_intents(self, intents: List[Intent], output_path: str):
-        """ÀÇµµ ºĞ¼® °á°ú ÀúÀå"""
+        """ì˜ë„ ë¶„ì„ ê²°ê³¼ ì €ì¥"""
         distribution = self.get_intent_distribution(intents)
         top_keywords = self.extract_all_keywords(intents)
         
@@ -356,38 +356,38 @@ class AdvancedIntentClassifier:
             json.dump(data, f, ensure_ascii=False, indent=2)
     
     def process(self, utterances_path: str, output_path: str) -> List[Intent]:
-        """NLP ÆÄÀÌÇÁ¶óÀÎ ½ÇÇà"""
-        print(f"[NLP] ¹ßÈ­ µ¥ÀÌÅÍ ·Îµå: {utterances_path}")
+        """NLP íŒŒì´í”„ë¼ì¸ ì‹¤í–‰"""
+        print(f"[NLP] ë°œí™” ë°ì´í„° ë¡œë“œ: {utterances_path}")
         with open(utterances_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         utterances = data['utterances']
         
-        print(f"[NLP] {len(utterances)}°³ ¹ßÈ­¿¡ ´ëÇÑ Á¾ÇÕ ºĞ¼® Áß...")
-        print("  - ÀÇµµ ºĞ·ù")
-        print("  - °¨Á¤ ºĞ¼®")
-        print("  - Å°¿öµå ÃßÃâ")
+        print(f"[NLP] {len(utterances)}ê°œ ë°œí™”ì— ëŒ€í•œ ì¢…í•© ë¶„ì„ ì¤‘...")
+        print("  - ì˜ë„ ë¶„ë¥˜")
+        print("  - ê°ì • ë¶„ì„")
+        print("  - í‚¤ì›Œë“œ ì¶”ì¶œ")
         
         intents = self.analyze_utterances(utterances)
         
-        print(f"[NLP] °á°ú ÀúÀå: {output_path}")
+        print(f"[NLP] ê²°ê³¼ ì €ì¥: {output_path}")
         self.save_intents(intents, output_path)
         
-        # Åë°è Ãâ·Â
+        # í†µê³„ ì¶œë ¥
         distribution = self.get_intent_distribution(intents)
         
-        print(f"\n[NLP] ÀÇµµ ºĞ·ù °á°ú:")
+        print(f"\n[NLP] ì˜ë„ ë¶„ë¥˜ ê²°ê³¼:")
         for intent_type, count in distribution['intent_types'].items():
-            print(f"  - {intent_type}: {count}°³")
+            print(f"  - {intent_type}: {count}ê°œ")
         
-        print(f"\n[NLP] °¨Á¤ ºĞÆ÷:")
+        print(f"\n[NLP] ê°ì • ë¶„í¬:")
         for sentiment, count in distribution['sentiments'].items():
-            print(f"  - {sentiment}: {count}°³")
+            print(f"  - {sentiment}: {count}ê°œ")
         
-        print(f"\n[NLP] »óÀ§ Å°¿öµå:")
+        print(f"\n[NLP] ìƒìœ„ í‚¤ì›Œë“œ:")
         top_keywords = self.extract_all_keywords(intents)[:10]
         for keyword, count in top_keywords:
-            print(f"  - {keyword}: {count}È¸")
+            print(f"  - {keyword}: {count}íšŒ")
         
         return intents
 
@@ -395,22 +395,22 @@ class AdvancedIntentClassifier:
 if __name__ == "__main__":
     import yaml
     
-    # ¼³Á¤ ·Îµå
+    # ì„¤ì • ë¡œë“œ
     with open('config/config.yaml', 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
     
-    # NLP ½ÇÇà
+    # NLP ì‹¤í–‰
     classifier = AdvancedIntentClassifier(config)
     intents = classifier.process(
         utterances_path='data/output/utterances.json',
         output_path='data/output/intents.json'
     )
     
-    print(f"\n[¿Ï·á] ÃÑ {len(intents)}°³ ÀÇµµ ºĞ¼® ¿Ï·á")
+    print(f"\n[ì™„ë£Œ] ì´ {len(intents)}ê°œ ì˜ë„ ë¶„ì„ ì™„ë£Œ")
     
-    # »ùÇÃ Ãâ·Â
-    print(f"\n»ùÇÃ ºĞ¼® °á°ú:")
+    # ìƒ˜í”Œ ì¶œë ¥
+    print(f"\nìƒ˜í”Œ ë¶„ì„ ê²°ê³¼:")
     for intent in intents[:3]:
-        print(f"  - {intent.intent_type} (½Å·Úµµ: {intent.confidence:.2f})")
-        print(f"    ¼¼ºÎ: {intent.sub_intent}, °¨Á¤: {intent.sentiment}")
-        print(f"    Å°¿öµå: {', '.join(intent.keywords[:3])}")
+        print(f"  - {intent.intent_type} (ì‹ ë¢°ë„: {intent.confidence:.2f})")
+        print(f"    ì„¸ë¶€: {intent.sub_intent}, ê°ì •: {intent.sentiment}")
+        print(f"    í‚¤ì›Œë“œ: {', '.join(intent.keywords[:3])}")
