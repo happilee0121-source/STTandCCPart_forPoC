@@ -1,10 +1,7 @@
-"""
-Semantic NLP Layer (Layer 3)
--------------------------------
-목적: 전처리된 발화 텍스트를 의미 분석이 가능한 구조화 데이터로 변환
-리소스: Kiwi (형태소 분석), BERT (의도 분류), KeyBERT (개념 추출)
-아웃풋: Intent Model – utterance_id, intent_id, intent_type, confidence
-"""
+# ─────────────────────────────────────────────
+# Semantic NLP Layer (Layer 3)
+# 전처리된 발화 텍스트를 의미 분석이 가능한 구조화 데이터로 변환 
+# ─────────────────────────────────────────────
 
 import json
 import uuid
@@ -13,10 +10,9 @@ from pathlib import Path
 from typing import Optional
 
 
-# ─────────────────────────────────────────────
 # 의존성 임포트 (설치 필요)
 # pip install kiwipiepy keybert transformers torch sentence-transformers
-# ─────────────────────────────────────────────
+
 
 try:
     from kiwipiepy import Kiwi
