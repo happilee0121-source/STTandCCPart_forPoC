@@ -1,0 +1,241 @@
+{
+  "metadata": {
+    "total_utterances": 23,
+    "processed_at": "2026-02-10T01:52:44.915221",
+    "speakers": [
+      "김팀장",
+      "이과장",
+      "박대리"
+    ],
+    "speaker_statistics": {
+      "김팀장": {
+        "count": 8,
+        "total_chars": 408,
+        "avg_length": 51.0
+      },
+      "박대리": {
+        "count": 8,
+        "total_chars": 478,
+        "avg_length": 59.75
+      },
+      "이과장": {
+        "count": 7,
+        "total_chars": 392,
+        "avg_length": 56.0
+      }
+    },
+    "preprocessing_config": {
+      "filler_words_removed": 19,
+      "min_utterance_length": 5
+    }
+  },
+  "utterances": [
+    {
+      "utterance_id": "UTT_0001",
+      "speaker": "김팀장",
+      "timestamp": "00:00:05",
+      "text": "음 . 네, 그러면 오늘 오늘 보안 요구사항에 대해서 논의를 시작하도록 하겠습니다 .",
+      "original_text": "음... 네, 그러면 오늘 오늘 보안 요구사항에 대해서 논의를 시작하도록 하겠습니다.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0002",
+      "speaker": "박대리",
+      "timestamp": "00:00:18",
+      "text": "네네, 먼저 먼저 사용자 인증 부분부터 얘기를 해볼까요 ? 현재 패스워드 정책이 너무 약한 것 같아요 . 뭐 .",
+      "original_text": "네네, 먼저 먼저 사용자 인증 부분부터 얘기를 해볼까요? 현재 패스워드 정책이 좀 너무 약한 것 같아요. 그 뭐...",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0003",
+      "speaker": "김팀장",
+      "timestamp": "00:00:35",
+      "text": "맞습니다 . 최소한 8자리는 넘어야 하고, 영문하고 숫자, 특수문자 조합이 반드시 필요할 것 같습니다 .",
+      "original_text": "맞습니다. 최소한 8자리는 넘어야 하고, 그 영문하고 숫자, 특수문자 조합이 반드시 필요할 것 같습니다.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0004",
+      "speaker": "이과장",
+      "timestamp": "00:00:52",
+      "text": "그리고 비밀번호 변경 주기도 설정을 해야 될 것 같은데요 . 90일마다 강제로 변경하도록 하면 어떨까요 ?",
+      "original_text": "음 그리고 비밀번호 변경 주기도 설정을 해야 될 것 같은데요. 약간 90일마다 강제로 변경하도록 하면 어떨까요?",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0005",
+      "speaker": "박대리",
+      "timestamp": "00:01:08",
+      "text": "좋은 의견이네요 ! 그리고 또 로그인 실패 시 계정 잠금 기능도 꼭 필요합니다 . 5회 이상 실패하면 . 음 . 30분간 잠금 ?",
+      "original_text": "좋은 의견이네요! 그리고 또 로그인 실패 시 계정 잠금 기능도 꼭 필요합니다. 5회 이상 실패하면... 음... 30분간 잠금?",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0006",
+      "speaker": "김팀장",
+      "timestamp": "00:01:27",
+      "text": "네 좋습니다 . 그것도 중요하죠 . 다음으로 데이터 암호화에 대해 얘기를 해볼까요 ?",
+      "original_text": "네 좋습니다. 그것도 중요하죠. 그 다음으로 데이터 암호화에 대해 좀 얘기를 해볼까요?",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0007",
+      "speaker": "이과장",
+      "timestamp": "00:01:42",
+      "text": "네, 중요한 개인정보는 당연히 암호화해서 저장을 해야 하는데, AES-256 알고리즘을 사용하면 될 것 같아요 .",
+      "original_text": "네, 중요한 개인정보는 당연히 암호화해서 저장을 해야 하는데, 그 AES-256 알고리즘을 사용하면 될 것 같아요.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0008",
+      "speaker": "박대리",
+      "timestamp": "00:01:58",
+      "text": "맞아요 맞아요 . 그리고 전송 중인 데이터도 보호를 해야 하니까 TLS . 뭐였더라 . TLS 1 .3 이상을 사용해야 합니다 .",
+      "original_text": "맞아요 맞아요. 그리고 전송 중인 데이터도 보호를 해야 하니까 TLS... 뭐였더라... 아 TLS 1.3 이상을 사용해야 합니다.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0009",
+      "speaker": "김팀장",
+      "timestamp": "00:02:15",
+      "text": "네 동의합니다 . 그리고 접근 제어는 어떻게 할까요 ? 어 . 역할 기반으로 ?",
+      "original_text": "네 동의합니다. 그리고 접근 제어는 어떻게 할까요? 어... 역할 기반으로?",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0010",
+      "speaker": "이과장",
+      "timestamp": "00:02:28",
+      "text": "네네 역할 기반 접근 제어, 즉 RBAC을 도입하면 좋을 것 같습니다 . 사용자 역할에 따라서 권한을 다르게 부여하는 그런 .",
+      "original_text": "네네 역할 기반 접근 제어, 즉 RBAC을 도입하면 좋을 것 같습니다. 사용자 역할에 따라서 권한을 다르게 부여하는 그런...",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0011",
+      "speaker": "박대리",
+      "timestamp": "00:02:46",
+      "text": "좋습니다 ! 그리고 관리자 권한은 특히 엄격하게 관리를 해야 하는데, 이중 인증을 적용하면 어떨까요 ?",
+      "original_text": "좋습니다! 그리고 관리자 권한은 특히 엄격하게 관리를 해야 하는데, 이중 인증을 적용하면 어떨까요?",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0012",
+      "speaker": "김팀장",
+      "timestamp": "00:03:02",
+      "text": "네, 관리자는 반드시 2FA를 적용해야 합니다 . 다음 감사 로그 관련해서도 논의가 필요할 것 같아요 .",
+      "original_text": "네, 관리자는 반드시 2FA를 적용해야 합니다. 그 다음 감사 로그 관련해서도 좀 논의가 필요할 것 같아요.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0013",
+      "speaker": "이과장",
+      "timestamp": "00:03:18",
+      "text": "모든 보안 관련 이벤트는 로그로 남겨야 합니다 . 로그인, 로그아웃, 권한 변경, 데이터 접근 . 이런 것들이요 .",
+      "original_text": "모든 보안 관련 이벤트는 로그로 남겨야 합니다. 로그인, 로그아웃, 권한 변경, 데이터 접근... 뭐 이런 것들이요.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0014",
+      "speaker": "박대리",
+      "timestamp": "00:03:36",
+      "text": "네 그리고 로그는 최소 1년간은 보관을 해야 하고, 위변조 방지를 위해서 . 음 . 별도의 로그 서버에 저장을 해야 합니다 .",
+      "original_text": "네 그리고 로그는 최소 1년간은 보관을 해야 하고, 위변조 방지를 위해서... 음... 별도의 로그 서버에 저장을 해야 합니다.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0015",
+      "speaker": "김팀장",
+      "timestamp": "00:03:54",
+      "text": "좋습니다 . 그리고 세션 관리는 어떻게 할까요 ? 타임아웃이라든지 .",
+      "original_text": "좋습니다. 그리고 세션 관리는 어떻게 할까요? 타임아웃이라든지...",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0016",
+      "speaker": "이과장",
+      "timestamp": "00:04:07",
+      "text": "세션 타임아웃을 30분으로 설정하고, 사용자가 일정 시간 동안 활동이 없으면 자동으로 로그아웃되도록 해야 합니다 .",
+      "original_text": "세션 타임아웃을 30분으로 설정하고, 사용자가 일정 시간 동안 활동이 없으면 자동으로 로그아웃되도록 해야 합니다.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0017",
+      "speaker": "박대리",
+      "timestamp": "00:04:25",
+      "text": "맞습니다 맞습니다 . 그리고 동시 로그인도 제한을 해야 할 것 같은데, 한 계정당 최대 3개의 세션만 허용하는 건 어떨까요 ?",
+      "original_text": "맞습니다 맞습니다. 그리고 동시 로그인도 제한을 해야 할 것 같은데, 한 계정당 최대 3개의 세션만 허용하는 건 어떨까요?",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0018",
+      "speaker": "김팀장",
+      "timestamp": "00:04:43",
+      "text": "좋은 의견입니다 . 마지막으로 보안 업데이트하고 패치 관리에 대해서도 정책이 필요할 것 같아요 .",
+      "original_text": "음 좋은 의견입니다. 마지막으로 보안 업데이트하고 패치 관리에 대해서도 정책이 필요할 것 같아요.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0019",
+      "speaker": "이과장",
+      "timestamp": "00:04:58",
+      "text": "네, 보안 패치는 공개된 후 30일 이내에 적용을 해야 하고, 긴급 패치는 7일 이내에 적용을 해야 합니다 .",
+      "original_text": "네, 보안 패치는 공개된 후 30일 이내에 적용을 해야 하고, 긴급 패치는 7일 이내에 적용을 해야 합니다.",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0020",
+      "speaker": "박대리",
+      "timestamp": "00:05:15",
+      "text": "그리고 취약점 점검도 정기적으로 해야 하는데, 분기마다 한 번씩 진행하면 좋을 것 같아요 . 자동화 스캔 도구 같은 걸로 .",
+      "original_text": "그리고 취약점 점검도 정기적으로 해야 하는데, 분기마다 한 번씩 진행하면 좋을 것 같아요. 그 자동화 스캔 도구 같은 걸로...",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0021",
+      "speaker": "김팀장",
+      "timestamp": "00:05:33",
+      "text": "네네, 오늘 논의한 내용 잘 정리를 해서 보안 요구사항 명세서에 반영하도록 하겠습니다 . 다들 수고하셨습니다 !",
+      "original_text": "네네, 오늘 논의한 내용 잘 정리를 해서 보안 요구사항 명세서에 반영하도록 하겠습니다. 다들 수고하셨습니다!",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0022",
+      "speaker": "이과장",
+      "timestamp": "00:05:48",
+      "text": "네 수고하셨습니다 !",
+      "original_text": "네 수고하셨습니다!",
+      "cleaned": true,
+      "merged_from": []
+    },
+    {
+      "utterance_id": "UTT_0023",
+      "speaker": "박대리",
+      "timestamp": "00:05:51",
+      "text": "감사합니다∼",
+      "original_text": "감사합니다~",
+      "cleaned": true,
+      "merged_from": []
+    }
+  ]
+}

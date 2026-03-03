@@ -1,0 +1,445 @@
+{
+  "metadata": {
+    "total_intents": 23,
+    "distribution": {
+      "intent_types": {
+        "agreement": 7,
+        "question": 6,
+        "requirement": 7,
+        "clarification": 2,
+        "suggestion": 1
+      },
+      "sub_intents": {
+        "question:general": 4,
+        "requirement:general": 6,
+        "question:method": 2,
+        "requirement:mandatory": 1
+      },
+      "sentiments": {
+        "neutral": 18,
+        "positive": 5
+      }
+    },
+    "top_keywords": [
+      {
+        "keyword": "그리고",
+        "count": 9
+      },
+      {
+        "keyword": "보안",
+        "count": 4
+      },
+      {
+        "keyword": "해야",
+        "count": 4
+      },
+      {
+        "keyword": "네네",
+        "count": 3
+      },
+      {
+        "keyword": "오늘",
+        "count": 2
+      },
+      {
+        "keyword": "사용자",
+        "count": 2
+      },
+      {
+        "keyword": "로그인",
+        "count": 2
+      },
+      {
+        "keyword": "접근",
+        "count": 2
+      },
+      {
+        "keyword": "제어",
+        "count": 2
+      },
+      {
+        "keyword": "어떻게",
+        "count": 2
+      },
+      {
+        "keyword": "관리자",
+        "count": 2
+      },
+      {
+        "keyword": "로그",
+        "count": 2
+      },
+      {
+        "keyword": "세션",
+        "count": 2
+      },
+      {
+        "keyword": "패치",
+        "count": 2
+      },
+      {
+        "keyword": "그러면",
+        "count": 1
+      },
+      {
+        "keyword": "요구사항",
+        "count": 1
+      },
+      {
+        "keyword": "대해서",
+        "count": 1
+      },
+      {
+        "keyword": "먼저",
+        "count": 1
+      },
+      {
+        "keyword": "인증",
+        "count": 1
+      },
+      {
+        "keyword": "부분",
+        "count": 1
+      }
+    ]
+  },
+  "intents": [
+    {
+      "utterance_id": "UTT_0001",
+      "intent_id": "INT_0001",
+      "intent_type": "agreement",
+      "confidence": 0.024999999999999998,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "오늘",
+        "그러면",
+        "보안",
+        "요구사항",
+        "대해서"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0002",
+      "intent_id": "INT_0002",
+      "intent_type": "question",
+      "confidence": 0.16999999999999998,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "먼저",
+        "네네",
+        "사용자",
+        "인증",
+        "부분"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0003",
+      "intent_id": "INT_0003",
+      "intent_type": "agreement",
+      "confidence": 0.14166666666666666,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "최소한",
+        "8자리",
+        "넘어야",
+        "하고",
+        "영문하고"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0004",
+      "intent_id": "INT_0004",
+      "intent_type": "question",
+      "confidence": 0.27999999999999997,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "그리고",
+        "비밀번호",
+        "변경",
+        "주기",
+        "설정"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0005",
+      "intent_id": "INT_0005",
+      "intent_type": "requirement",
+      "confidence": 0.19374999999999998,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "잠금",
+        "의견이네",
+        "그리고",
+        "로그인",
+        "실패"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0006",
+      "intent_id": "INT_0006",
+      "intent_type": "agreement",
+      "confidence": 0.2833333333333333,
+      "sub_intent": null,
+      "sentiment": "positive",
+      "keywords": [
+        "그것",
+        "중요하",
+        "다음",
+        "데이터",
+        "암호화"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0007",
+      "intent_id": "INT_0007",
+      "intent_type": "agreement",
+      "confidence": 0.14166666666666666,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "중요한",
+        "개인정보",
+        "당연히",
+        "암호화해서",
+        "저장"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0008",
+      "intent_id": "INT_0008",
+      "intent_type": "requirement",
+      "confidence": 0.2125,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "맞아",
+        "TLS",
+        "그리고",
+        "전송",
+        "중인"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0009",
+      "intent_id": "INT_0009",
+      "intent_type": "question",
+      "confidence": 0.4499999999999999,
+      "sub_intent": "method",
+      "sentiment": "neutral",
+      "keywords": [
+        "동의합니",
+        "그리고",
+        "접근",
+        "제어",
+        "어떻게"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0010",
+      "intent_id": "INT_0010",
+      "intent_type": "clarification",
+      "confidence": 0.2125,
+      "sub_intent": null,
+      "sentiment": "positive",
+      "keywords": [
+        "역할",
+        "네네",
+        "기반",
+        "접근",
+        "제어"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0011",
+      "intent_id": "INT_0011",
+      "intent_type": "question",
+      "confidence": 0.27999999999999997,
+      "sub_intent": "general",
+      "sentiment": "positive",
+      "keywords": [
+        "그리고",
+        "관리자",
+        "권한",
+        "특히",
+        "엄격하게"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0012",
+      "intent_id": "INT_0012",
+      "intent_type": "requirement",
+      "confidence": 0.33749999999999997,
+      "sub_intent": "mandatory",
+      "sentiment": "neutral",
+      "keywords": [
+        "관리자",
+        "반드시",
+        "2FA",
+        "적용해야",
+        "합니"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0013",
+      "intent_id": "INT_0013",
+      "intent_type": "requirement",
+      "confidence": 0.0,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "모든",
+        "보안",
+        "관련",
+        "이벤트",
+        "로그"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0014",
+      "intent_id": "INT_0014",
+      "intent_type": "agreement",
+      "confidence": 0.14166666666666666,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "로그",
+        "해야",
+        "그리고",
+        "최소",
+        "1년간"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0015",
+      "intent_id": "INT_0015",
+      "intent_type": "question",
+      "confidence": 0.30999999999999994,
+      "sub_intent": "method",
+      "sentiment": "positive",
+      "keywords": [
+        "그리고",
+        "세션",
+        "관리",
+        "어떻게",
+        "할까"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0016",
+      "intent_id": "INT_0016",
+      "intent_type": "requirement",
+      "confidence": 0.23124999999999998,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "세션",
+        "타임아웃",
+        "30분",
+        "설정하고",
+        "사용자"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0017",
+      "intent_id": "INT_0017",
+      "intent_type": "question",
+      "confidence": 0.27999999999999997,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "그리고",
+        "동시",
+        "로그인",
+        "제한",
+        "해야"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0018",
+      "intent_id": "INT_0018",
+      "intent_type": "agreement",
+      "confidence": 0.024999999999999998,
+      "sub_intent": null,
+      "sentiment": "positive",
+      "keywords": [
+        "의견입니",
+        "마지막",
+        "보안",
+        "업데이트하고",
+        "패치"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0019",
+      "intent_id": "INT_0019",
+      "intent_type": "requirement",
+      "confidence": 0.2125,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "패치",
+        "이내",
+        "적용",
+        "해야",
+        "보안"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0020",
+      "intent_id": "INT_0020",
+      "intent_type": "suggestion",
+      "confidence": 0.2125,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "그리고",
+        "취약점",
+        "점검",
+        "정기적",
+        "해야"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0021",
+      "intent_id": "INT_0021",
+      "intent_type": "clarification",
+      "confidence": 0.0375,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "네네",
+        "오늘",
+        "논의한",
+        "내용",
+        "정리"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0022",
+      "intent_id": "INT_0022",
+      "intent_type": "agreement",
+      "confidence": 0.14166666666666666,
+      "sub_intent": null,
+      "sentiment": "neutral",
+      "keywords": [
+        "수고하셨"
+      ]
+    },
+    {
+      "utterance_id": "UTT_0023",
+      "intent_id": "INT_0023",
+      "intent_type": "requirement",
+      "confidence": 0.0,
+      "sub_intent": "general",
+      "sentiment": "neutral",
+      "keywords": [
+        "감사합니다∼"
+      ]
+    }
+  ]
+}

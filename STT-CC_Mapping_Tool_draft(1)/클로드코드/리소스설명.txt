@@ -1,0 +1,9 @@
+# Pre-processing Layer (Layer 2)
+# 별도 설치 필요 없음 (Python 표준 라이브러리만 사용)
+
+# Semantic NLP Layer (Layer 3)
+kiwipiepy>=0.17.0           # 한국어 형태소 분석
+keybert>=0.8.3              # 키워드 추출
+sentence-transformers>=2.7.0 # KeyBERT 임베딩 백엔드
+transformers>=4.40.0        # BERT 의도 분류 (zero-shot)
+torch>=2.1.0                # transformers 백엔드 (CPU 사용 가능)

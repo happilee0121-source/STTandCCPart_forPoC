@@ -1,0 +1,1149 @@
+{
+  "metadata": {
+    "title": "Common Criteria Part 2 - Security Functional Components",
+    "version": "CC:2022 Revision 1",
+    "date": "November 2022",
+    "description": "Complete catalog of security functional components organized by Class, Family, and Component"
+  },
+  "classes": [
+    {
+      "class_id": "FAU",
+      "class_name": "Security audit",
+      "families": [
+        {
+          "family_id": "FAU_ARP",
+          "family_name": "Security audit automatic response",
+          "components": [
+            {
+              "component_id": "FAU_ARP.1",
+              "component_name": "Security alarms"
+            }
+          ]
+        },
+        {
+          "family_id": "FAU_GEN",
+          "family_name": "Security audit data generation",
+          "components": [
+            {
+              "component_id": "FAU_GEN.1",
+              "component_name": "Audit data generation"
+            },
+            {
+              "component_id": "FAU_GEN.2",
+              "component_name": "User identity association"
+            }
+          ]
+        },
+        {
+          "family_id": "FAU_SAA",
+          "family_name": "Security audit analysis",
+          "components": [
+            {
+              "component_id": "FAU_SAA.1",
+              "component_name": "Potential violation analysis"
+            },
+            {
+              "component_id": "FAU_SAA.2",
+              "component_name": "Profile based anomaly detection"
+            },
+            {
+              "component_id": "FAU_SAA.3",
+              "component_name": "Simple attack heuristics"
+            },
+            {
+              "component_id": "FAU_SAA.4",
+              "component_name": "Complex attack heuristics"
+            }
+          ]
+        },
+        {
+          "family_id": "FAU_SAR",
+          "family_name": "Security audit review",
+          "components": [
+            {
+              "component_id": "FAU_SAR.1",
+              "component_name": "Audit review"
+            },
+            {
+              "component_id": "FAU_SAR.2",
+              "component_name": "Restricted audit review"
+            },
+            {
+              "component_id": "FAU_SAR.3",
+              "component_name": "Selectable audit review"
+            }
+          ]
+        },
+        {
+          "family_id": "FAU_SEL",
+          "family_name": "Security audit event selection",
+          "components": [
+            {
+              "component_id": "FAU_SEL.1",
+              "component_name": "Selective audit"
+            }
+          ]
+        },
+        {
+          "family_id": "FAU_STG",
+          "family_name": "Security audit data storage",
+          "components": [
+            {
+              "component_id": "FAU_STG.1",
+              "component_name": "Audit data storage location"
+            },
+            {
+              "component_id": "FAU_STG.2",
+              "component_name": "Protected audit data storage"
+            },
+            {
+              "component_id": "FAU_STG.3",
+              "component_name": "Guarantees of audit data availability"
+            },
+            {
+              "component_id": "FAU_STG.4",
+              "component_name": "Action in case of possible audit data loss"
+            },
+            {
+              "component_id": "FAU_STG.5",
+              "component_name": "Prevention of audit data loss"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FCO",
+      "class_name": "Communication",
+      "families": [
+        {
+          "family_id": "FCO_NRO",
+          "family_name": "Non-repudiation of origin",
+          "components": [
+            {
+              "component_id": "FCO_NRO.1",
+              "component_name": "Selective proof of origin"
+            },
+            {
+              "component_id": "FCO_NRO.2",
+              "component_name": "Enforced proof of origin"
+            }
+          ]
+        },
+        {
+          "family_id": "FCO_NRR",
+          "family_name": "Non-repudiation of receipt",
+          "components": [
+            {
+              "component_id": "FCO_NRR.1",
+              "component_name": "Selective proof of receipt"
+            },
+            {
+              "component_id": "FCO_NRR.2",
+              "component_name": "Enforced proof of receipt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FCS",
+      "class_name": "Cryptographic support",
+      "families": [
+        {
+          "family_id": "FCS_CKM",
+          "family_name": "Cryptographic key management",
+          "components": [
+            {
+              "component_id": "FCS_CKM.1",
+              "component_name": "Cryptographic key generation"
+            },
+            {
+              "component_id": "FCS_CKM.2",
+              "component_name": "Cryptographic key distribution"
+            },
+            {
+              "component_id": "FCS_CKM.3",
+              "component_name": "Cryptographic key access"
+            },
+            {
+              "component_id": "FCS_CKM.4",
+              "component_name": "Cryptographic key destruction"
+            },
+            {
+              "component_id": "FCS_CKM.5",
+              "component_name": "Cryptographic key derivation"
+            },
+            {
+              "component_id": "FCS_CKM.6",
+              "component_name": "Timing and event of cryptographic key destruction"
+            }
+          ]
+        },
+        {
+          "family_id": "FCS_COP",
+          "family_name": "Cryptographic operation",
+          "components": [
+            {
+              "component_id": "FCS_COP.1",
+              "component_name": "Cryptographic operation"
+            }
+          ]
+        },
+        {
+          "family_id": "FCS_RBG",
+          "family_name": "Random bit generation",
+          "components": [
+            {
+              "component_id": "FCS_RBG.1",
+              "component_name": "Random bit generation (RBG)"
+            },
+            {
+              "component_id": "FCS_RBG.2",
+              "component_name": "Random bit generation (external seeding)"
+            },
+            {
+              "component_id": "FCS_RBG.3",
+              "component_name": "Random bit generation (internal seeding – single source)"
+            },
+            {
+              "component_id": "FCS_RBG.4",
+              "component_name": "Random bit generation (internal seeding – multiple sources)"
+            },
+            {
+              "component_id": "FCS_RBG.5",
+              "component_name": "Random bit generation (combining noise sources)"
+            },
+            {
+              "component_id": "FCS_RBG.6",
+              "component_name": "Random bit generation service"
+            }
+          ]
+        },
+        {
+          "family_id": "FCS_RNG",
+          "family_name": "Generation of random numbers",
+          "components": [
+            {
+              "component_id": "FCS_RNG.1",
+              "component_name": "Random number generation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FDP",
+      "class_name": "User data protection",
+      "families": [
+        {
+          "family_id": "FDP_ACC",
+          "family_name": "Access control policy",
+          "components": [
+            {
+              "component_id": "FDP_ACC.1",
+              "component_name": "Subset access control"
+            },
+            {
+              "component_id": "FDP_ACC.2",
+              "component_name": "Complete access control"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_ACF",
+          "family_name": "Access control functions",
+          "components": [
+            {
+              "component_id": "FDP_ACF.1",
+              "component_name": "Security attribute-based access control"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_DAU",
+          "family_name": "Data authentication",
+          "components": [
+            {
+              "component_id": "FDP_DAU.1",
+              "component_name": "Basic Data Authentication"
+            },
+            {
+              "component_id": "FDP_DAU.2",
+              "component_name": "Data Authentication with Identity of Guarantor"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_ETC",
+          "family_name": "Export from the TOE",
+          "components": [
+            {
+              "component_id": "FDP_ETC.1",
+              "component_name": "Export of user data without security attributes"
+            },
+            {
+              "component_id": "FDP_ETC.2",
+              "component_name": "Export of user data with security attributes"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_IFC",
+          "family_name": "Information flow control policy",
+          "components": [
+            {
+              "component_id": "FDP_IFC.1",
+              "component_name": "Subset information flow control"
+            },
+            {
+              "component_id": "FDP_IFC.2",
+              "component_name": "Complete information flow control"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_IFF",
+          "family_name": "Information flow control functions",
+          "components": [
+            {
+              "component_id": "FDP_IFF.1",
+              "component_name": "Simple security attributes"
+            },
+            {
+              "component_id": "FDP_IFF.2",
+              "component_name": "Hierarchical security attributes"
+            },
+            {
+              "component_id": "FDP_IFF.3",
+              "component_name": "Limited illicit information flows"
+            },
+            {
+              "component_id": "FDP_IFF.4",
+              "component_name": "Partial elimination of illicit information flows"
+            },
+            {
+              "component_id": "FDP_IFF.5",
+              "component_name": "No illicit information flows"
+            },
+            {
+              "component_id": "FDP_IFF.6",
+              "component_name": "Illicit information flow monitoring"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_IRC",
+          "family_name": "Information Retention Control",
+          "components": [
+            {
+              "component_id": "FDP_IRC.1",
+              "component_name": "Information retention control"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_ITC",
+          "family_name": "Import from outside of the TOE",
+          "components": [
+            {
+              "component_id": "FDP_ITC.1",
+              "component_name": "Import of user data without security attributes"
+            },
+            {
+              "component_id": "FDP_ITC.2",
+              "component_name": "Import of user data with security attributes"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_ITT",
+          "family_name": "Internal TOE transfer",
+          "components": [
+            {
+              "component_id": "FDP_ITT.1",
+              "component_name": "Basic internal transfer protection"
+            },
+            {
+              "component_id": "FDP_ITT.2",
+              "component_name": "Transmission separation by attribute"
+            },
+            {
+              "component_id": "FDP_ITT.3",
+              "component_name": "Integrity monitoring"
+            },
+            {
+              "component_id": "FDP_ITT.4",
+              "component_name": "Attribute-based integrity monitoring"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_RIP",
+          "family_name": "Residual information protection",
+          "components": [
+            {
+              "component_id": "FDP_RIP.1",
+              "component_name": "Subset residual information protection"
+            },
+            {
+              "component_id": "FDP_RIP.2",
+              "component_name": "Full residual information protection"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_ROL",
+          "family_name": "Rollback",
+          "components": [
+            {
+              "component_id": "FDP_ROL.1",
+              "component_name": "Basic rollback"
+            },
+            {
+              "component_id": "FDP_ROL.2",
+              "component_name": "Advanced rollback"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_SDC",
+          "family_name": "Stored data confidentiality",
+          "components": [
+            {
+              "component_id": "FDP_SDC.1",
+              "component_name": "Stored data confidentiality"
+            },
+            {
+              "component_id": "FDP_SDC.2",
+              "component_name": "Stored data confidentiality with dedicated method"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_SDI",
+          "family_name": "Stored data integrity",
+          "components": [
+            {
+              "component_id": "FDP_SDI.1",
+              "component_name": "Stored data integrity monitoring"
+            },
+            {
+              "component_id": "FDP_SDI.2",
+              "component_name": "Stored data integrity monitoring and action"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_UCT",
+          "family_name": "Inter-TSF user data confidentiality transfer protection",
+          "components": [
+            {
+              "component_id": "FDP_UCT.1",
+              "component_name": "Basic data exchange confidentiality"
+            }
+          ]
+        },
+        {
+          "family_id": "FDP_UIT",
+          "family_name": "Inter-TSF user data integrity transfer protection",
+          "components": [
+            {
+              "component_id": "FDP_UIT.1",
+              "component_name": "Data exchange integrity"
+            },
+            {
+              "component_id": "FDP_UIT.2",
+              "component_name": "Source data exchange recovery"
+            },
+            {
+              "component_id": "FDP_UIT.3",
+              "component_name": "Destination data exchange recovery"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FIA",
+      "class_name": "Identification and authentication",
+      "families": [
+        {
+          "family_id": "FIA_AFL",
+          "family_name": "Authentication failures",
+          "components": [
+            {
+              "component_id": "FIA_AFL.1",
+              "component_name": "Authentication failure handling"
+            }
+          ]
+        },
+        {
+          "family_id": "FIA_API",
+          "family_name": "Authentication proof of identity",
+          "components": [
+            {
+              "component_id": "FIA_API.1",
+              "component_name": "Authentication proof of identity"
+            }
+          ]
+        },
+        {
+          "family_id": "FIA_ATD",
+          "family_name": "User attribute definition",
+          "components": [
+            {
+              "component_id": "FIA_ATD.1",
+              "component_name": "User attribute definition"
+            }
+          ]
+        },
+        {
+          "family_id": "FIA_SOS",
+          "family_name": "Specification of secrets",
+          "components": [
+            {
+              "component_id": "FIA_SOS.1",
+              "component_name": "Verification of secrets"
+            },
+            {
+              "component_id": "FIA_SOS.2",
+              "component_name": "TSF Generation of secrets"
+            }
+          ]
+        },
+        {
+          "family_id": "FIA_UAU",
+          "family_name": "User authentication",
+          "components": [
+            {
+              "component_id": "FIA_UAU.1",
+              "component_name": "Timing of authentication"
+            },
+            {
+              "component_id": "FIA_UAU.2",
+              "component_name": "User authentication before any action"
+            },
+            {
+              "component_id": "FIA_UAU.3",
+              "component_name": "Unforgeable authentication"
+            },
+            {
+              "component_id": "FIA_UAU.4",
+              "component_name": "Single-use authentication mechanisms"
+            },
+            {
+              "component_id": "FIA_UAU.5",
+              "component_name": "Multiple authentication mechanisms"
+            },
+            {
+              "component_id": "FIA_UAU.6",
+              "component_name": "Re-authenticating"
+            },
+            {
+              "component_id": "FIA_UAU.7",
+              "component_name": "Protected authentication feedback"
+            }
+          ]
+        },
+        {
+          "family_id": "FIA_UID",
+          "family_name": "User identification",
+          "components": [
+            {
+              "component_id": "FIA_UID.1",
+              "component_name": "Timing of identification"
+            },
+            {
+              "component_id": "FIA_UID.2",
+              "component_name": "User identification before any action"
+            }
+          ]
+        },
+        {
+          "family_id": "FIA_USB",
+          "family_name": "User-subject binding",
+          "components": [
+            {
+              "component_id": "FIA_USB.1",
+              "component_name": "User-subject binding"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FMT",
+      "class_name": "Security management",
+      "families": [
+        {
+          "family_id": "FMT_LIM",
+          "family_name": "Limited capabilities and availability",
+          "components": [
+            {
+              "component_id": "FMT_LIM.1",
+              "component_name": "Limited capabilities"
+            },
+            {
+              "component_id": "FMT_LIM.2",
+              "component_name": "Limited availability"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_MOF",
+          "family_name": "Management of functions in TSF",
+          "components": [
+            {
+              "component_id": "FMT_MOF.1",
+              "component_name": "Management of security functions behaviour"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_MSA",
+          "family_name": "Management of security attributes",
+          "components": [
+            {
+              "component_id": "FMT_MSA.1",
+              "component_name": "Management of security attributes"
+            },
+            {
+              "component_id": "FMT_MSA.2",
+              "component_name": "Secure security attributes"
+            },
+            {
+              "component_id": "FMT_MSA.3",
+              "component_name": "Static attribute initialization"
+            },
+            {
+              "component_id": "FMT_MSA.4",
+              "component_name": "Security attribute value inheritance"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_MTD",
+          "family_name": "Management of TSF data",
+          "components": [
+            {
+              "component_id": "FMT_MTD.1",
+              "component_name": "Management of TSF data"
+            },
+            {
+              "component_id": "FMT_MTD.2",
+              "component_name": "Management of limits on TSF data"
+            },
+            {
+              "component_id": "FMT_MTD.3",
+              "component_name": "Secure TSF data"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_REV",
+          "family_name": "Revocation",
+          "components": [
+            {
+              "component_id": "FMT_REV.1",
+              "component_name": "Revocation"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_SAE",
+          "family_name": "Security attribute expiration",
+          "components": [
+            {
+              "component_id": "FMT_SAE.1",
+              "component_name": "Time-limited authorization"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_SMF",
+          "family_name": "Specification of Management Functions",
+          "components": [
+            {
+              "component_id": "FMT_SMF.1",
+              "component_name": "Specification of Management Functions"
+            }
+          ]
+        },
+        {
+          "family_id": "FMT_SMR",
+          "family_name": "Security management roles",
+          "components": [
+            {
+              "component_id": "FMT_SMR.1",
+              "component_name": "Security roles"
+            },
+            {
+              "component_id": "FMT_SMR.2",
+              "component_name": "Restrictions on security roles"
+            },
+            {
+              "component_id": "FMT_SMR.3",
+              "component_name": "Assuming roles"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FPR",
+      "class_name": "Privacy",
+      "families": [
+        {
+          "family_id": "FPR_ANO",
+          "family_name": "Anonymity",
+          "components": [
+            {
+              "component_id": "FPR_ANO.1",
+              "component_name": "Anonymity"
+            },
+            {
+              "component_id": "FPR_ANO.2",
+              "component_name": "Anonymity without soliciting information"
+            }
+          ]
+        },
+        {
+          "family_id": "FPR_PSE",
+          "family_name": "Pseudonymity",
+          "components": [
+            {
+              "component_id": "FPR_PSE.1",
+              "component_name": "Pseudonymity"
+            },
+            {
+              "component_id": "FPR_PSE.2",
+              "component_name": "Reversible pseudonymity"
+            },
+            {
+              "component_id": "FPR_PSE.3",
+              "component_name": "Alias pseudonymity"
+            }
+          ]
+        },
+        {
+          "family_id": "FPR_UNL",
+          "family_name": "Unlinkability",
+          "components": [
+            {
+              "component_id": "FPR_UNL.1",
+              "component_name": "Unlinkability of operations"
+            }
+          ]
+        },
+        {
+          "family_id": "FPR_UNO",
+          "family_name": "Unobservability",
+          "components": [
+            {
+              "component_id": "FPR_UNO.1",
+              "component_name": "Unobservability"
+            },
+            {
+              "component_id": "FPR_UNO.2",
+              "component_name": "Allocation of information impacting unobservability"
+            },
+            {
+              "component_id": "FPR_UNO.3",
+              "component_name": "Unobservability without soliciting information"
+            },
+            {
+              "component_id": "FPR_UNO.4",
+              "component_name": "Authorized user observability"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FPT",
+      "class_name": "Protection of the TSF",
+      "families": [
+        {
+          "family_id": "FPT_EMS",
+          "family_name": "TOE emanation",
+          "components": [
+            {
+              "component_id": "FPT_EMS.1",
+              "component_name": "Emanation of TSF and User data"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_FLS",
+          "family_name": "Fail secure",
+          "components": [
+            {
+              "component_id": "FPT_FLS.1",
+              "component_name": "Failure with preservation of secure state"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_INI",
+          "family_name": "TSF initialization",
+          "components": [
+            {
+              "component_id": "FPT_INI.1",
+              "component_name": "TSF initialization"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_ITA",
+          "family_name": "Availability of exported TSF data",
+          "components": [
+            {
+              "component_id": "FPT_ITA.1",
+              "component_name": "Inter-TSF availability within a defined availability metric"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_ITC",
+          "family_name": "Confidentiality of exported TSF data",
+          "components": [
+            {
+              "component_id": "FPT_ITC.1",
+              "component_name": "Inter-TSF confidentiality during transmission"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_ITI",
+          "family_name": "Integrity of exported TSF data",
+          "components": [
+            {
+              "component_id": "FPT_ITI.1",
+              "component_name": "Inter-TSF detection of modification"
+            },
+            {
+              "component_id": "FPT_ITI.2",
+              "component_name": "Inter-TSF detection and correction of modification"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_ITT",
+          "family_name": "Internal TOE TSF data transfer",
+          "components": [
+            {
+              "component_id": "FPT_ITT.1",
+              "component_name": "Basic internal TSF data transfer protection"
+            },
+            {
+              "component_id": "FPT_ITT.2",
+              "component_name": "TSF data transfer separation"
+            },
+            {
+              "component_id": "FPT_ITT.3",
+              "component_name": "TSF data integrity monitoring"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_PHP",
+          "family_name": "TSF physical protection",
+          "components": [
+            {
+              "component_id": "FPT_PHP.1",
+              "component_name": "Passive detection of physical attack"
+            },
+            {
+              "component_id": "FPT_PHP.2",
+              "component_name": "Notification of physical attack"
+            },
+            {
+              "component_id": "FPT_PHP.3",
+              "component_name": "Resistance to physical attack"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_RCV",
+          "family_name": "Trusted recovery",
+          "components": [
+            {
+              "component_id": "FPT_RCV.1",
+              "component_name": "Manual recovery"
+            },
+            {
+              "component_id": "FPT_RCV.2",
+              "component_name": "Automated recovery"
+            },
+            {
+              "component_id": "FPT_RCV.3",
+              "component_name": "Automated recovery without undue loss"
+            },
+            {
+              "component_id": "FPT_RCV.4",
+              "component_name": "Function recovery"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_RPL",
+          "family_name": "Replay detection",
+          "components": [
+            {
+              "component_id": "FPT_RPL.1",
+              "component_name": "Replay detection"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_SSP",
+          "family_name": "State synchrony protocol",
+          "components": [
+            {
+              "component_id": "FPT_SSP.1",
+              "component_name": "Simple trusted acknowledgement"
+            },
+            {
+              "component_id": "FPT_SSP.2",
+              "component_name": "Mutual trusted acknowledgement"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_STM",
+          "family_name": "Time stamps",
+          "components": [
+            {
+              "component_id": "FPT_STM.1",
+              "component_name": "Reliable time stamps"
+            },
+            {
+              "component_id": "FPT_STM.2",
+              "component_name": "Time source"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_TDC",
+          "family_name": "Inter-TSF TSF data consistency",
+          "components": [
+            {
+              "component_id": "FPT_TDC.1",
+              "component_name": "Inter-TSF basic TSF data consistency"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_TEE",
+          "family_name": "Testing of external entities",
+          "components": [
+            {
+              "component_id": "FPT_TEE.1",
+              "component_name": "Testing of external entities"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_TRC",
+          "family_name": "Internal TOE TSF data replication consistency",
+          "components": [
+            {
+              "component_id": "FPT_TRC.1",
+              "component_name": "Internal TSF consistency"
+            }
+          ]
+        },
+        {
+          "family_id": "FPT_TST",
+          "family_name": "TSF self-test",
+          "components": [
+            {
+              "component_id": "FPT_TST.1",
+              "component_name": "TSF self-testing"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FRU",
+      "class_name": "Resource utilization",
+      "families": [
+        {
+          "family_id": "FRU_FLT",
+          "family_name": "Fault tolerance",
+          "components": [
+            {
+              "component_id": "FRU_FLT.1",
+              "component_name": "Degraded fault tolerance"
+            },
+            {
+              "component_id": "FRU_FLT.2",
+              "component_name": "Limited fault tolerance"
+            }
+          ]
+        },
+        {
+          "family_id": "FRU_PRS",
+          "family_name": "Priority of service",
+          "components": [
+            {
+              "component_id": "FRU_PRS.1",
+              "component_name": "Limited priority of service"
+            },
+            {
+              "component_id": "FRU_PRS.2",
+              "component_name": "Full priority of service"
+            }
+          ]
+        },
+        {
+          "family_id": "FRU_RSA",
+          "family_name": "Resource allocation",
+          "components": [
+            {
+              "component_id": "FRU_RSA.1",
+              "component_name": "Maximum quotas"
+            },
+            {
+              "component_id": "FRU_RSA.2",
+              "component_name": "Minimum and maximum quotas"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FTA",
+      "class_name": "TOE access",
+      "families": [
+        {
+          "family_id": "FTA_LSA",
+          "family_name": "Limitation on scope of selectable attributes",
+          "components": [
+            {
+              "component_id": "FTA_LSA.1",
+              "component_name": "Limitation on scope of selectable attributes"
+            }
+          ]
+        },
+        {
+          "family_id": "FTA_MCS",
+          "family_name": "Limitation on multiple concurrent sessions",
+          "components": [
+            {
+              "component_id": "FTA_MCS.1",
+              "component_name": "Basic limitation on multiple concurrent sessions"
+            },
+            {
+              "component_id": "FTA_MCS.2",
+              "component_name": "Per user attribute limitation on multiple concurrent sessions"
+            }
+          ]
+        },
+        {
+          "family_id": "FTA_SSL",
+          "family_name": "Session locking and termination",
+          "components": [
+            {
+              "component_id": "FTA_SSL.1",
+              "component_name": "TSF-initiated session locking"
+            },
+            {
+              "component_id": "FTA_SSL.2",
+              "component_name": "User-initiated locking"
+            },
+            {
+              "component_id": "FTA_SSL.3",
+              "component_name": "TSF-initiated termination"
+            },
+            {
+              "component_id": "FTA_SSL.4",
+              "component_name": "User-initiated termination"
+            }
+          ]
+        },
+        {
+          "family_id": "FTA_TAB",
+          "family_name": "TOE access banners",
+          "components": [
+            {
+              "component_id": "FTA_TAB.1",
+              "component_name": "Default TOE access banners"
+            }
+          ]
+        },
+        {
+          "family_id": "FTA_TAH",
+          "family_name": "TOE access history",
+          "components": [
+            {
+              "component_id": "FTA_TAH.1",
+              "component_name": "TOE access history"
+            }
+          ]
+        },
+        {
+          "family_id": "FTA_TSE",
+          "family_name": "TOE session establishment",
+          "components": [
+            {
+              "component_id": "FTA_TSE.1",
+              "component_name": "TOE session establishment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class_id": "FTP",
+      "class_name": "Trusted path/channels",
+      "families": [
+        {
+          "family_id": "FTP_ITC",
+          "family_name": "Inter-TSF trusted channel",
+          "components": [
+            {
+              "component_id": "FTP_ITC.1",
+              "component_name": "Inter-TSF trusted channel"
+            }
+          ]
+        },
+        {
+          "family_id": "FTP_PRO",
+          "family_name": "Trusted channel protocol",
+          "components": [
+            {
+              "component_id": "FTP_PRO.1",
+              "component_name": "Trusted channel protocol"
+            },
+            {
+              "component_id": "FTP_PRO.2",
+              "component_name": "Trusted channel establishment"
+            },
+            {
+              "component_id": "FTP_PRO.3",
+              "component_name": "Trusted channel data protection"
+            }
+          ]
+        },
+        {
+          "family_id": "FTP_TRP",
+          "family_name": "Trusted path",
+          "components": [
+            {
+              "component_id": "FTP_TRP.1",
+              "component_name": "Trusted path"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_classes": 11,
+    "total_families": 66,
+    "total_components": 133
+  }
+}
