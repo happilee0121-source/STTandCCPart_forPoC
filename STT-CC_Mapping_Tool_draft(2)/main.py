@@ -1,11 +1,8 @@
 """
 STT-CC Mapping Tool — Full Pipeline Orchestrator
-=================================================
-레이어별 모듈을 순서대로 실행하는 메인 진입점.
-
+레이어별 모듈을 순서대로 실행하는 메인 진입점
 사용법:
     python main.py --stt TranscriptSTT.txt [--openai-key sk-...] [--neo4j-uri bolt://...]
-
 환경변수로도 설정 가능:
     OPENAI_API_KEY, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 """
@@ -21,9 +18,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 
-# ─────────────────────────────────────────────
 # 로깅 설정
-# ─────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -53,9 +48,8 @@ CC_PART2_ALL_FAMILIES = {
 }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # Layer 1 · 입력 데이터 (Input Layer)
-# ══════════════════════════════════════════════════════════════════════════════
 class InputLayer:
     def __init__(self, filepath: str):
         self.filepath = Path(filepath)
@@ -69,9 +63,9 @@ class InputLayer:
         return raw
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # Layer 2 · 전처리 (Pre-processing Layer)
-# ══════════════════════════════════════════════════════════════════════════════
+
 class PreprocessingLayer:
     _LINE_RE = re.compile(
         r"^(?P<speaker>.+?)\s{2,}(?P<timestamp>\d{1,2}:\d{2}(?::\d{2})?)\s+(?P<text>.+)$"
@@ -145,9 +139,8 @@ class PreprocessingLayer:
         return path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # Layer 3 · 자연어 처리 (NLP Layer)
-# ══════════════════════════════════════════════════════════════════════════════
+
 class NLPLayer:
     def __init__(self):
         try:
@@ -216,9 +209,8 @@ class NLPLayer:
         return path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # Layer 4 · 의미 분석 (Semantic Layer)
-# ══════════════════════════════════════════════════════════════════════════════
+
 class SemanticLayer:
     _SYS = """
 당신은 정보보안 요구사항 분석 전문가입니다.
@@ -313,9 +305,8 @@ class SemanticLayer:
         return path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # Layer 5 · CC Part2 매핑 (CC Part2 Mapping Layer)
-# ══════════════════════════════════════════════════════════════════════════════
+
 class CCMappingLayer:
     _EXAMPLES = """
 매핑 예시 (CC Family Level):
@@ -484,9 +475,8 @@ class CCMappingLayer:
         return path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # Layer 6 · 누락 요구사항 감지 (Missing Analysis Layer)
-# ══════════════════════════════════════════════════════════════════════════════
+
 class MissingAnalysisLayer:
     def __init__(self, neo4j_uri="bolt://localhost:7687",
                  neo4j_user="neo4j", neo4j_password="password"):
@@ -661,9 +651,9 @@ def _neo4j_connect(uri: str, user: str, password: str, layer: int):
         return None
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # CLI 진입점
-# ══════════════════════════════════════════════════════════════════════════════
+
 def parse_args():
     p = argparse.ArgumentParser(description="STT-CC Mapping Tool Full Pipeline")
     p.add_argument("--stt",         default="TranscriptSTT.txt",
@@ -688,10 +678,10 @@ def main():
 
     log.info("━━━ STT-CC Mapping Tool 파이프라인 시작 ━━━")
 
-    # ── Layer 1 ─ 입력 ──────────────────────────────────────────
+    # Layer 1  입력 
     raw_text = InputLayer(args.stt).load()
 
-    # ── Layer 2 ─ 전처리 ────────────────────────────────────────
+    # Layer 2  전처리 
     if 2 not in skip:
         layer2        = PreprocessingLayer()
         minutes_input = layer2.process(raw_text)
@@ -702,7 +692,7 @@ def main():
         )["segments"]
         log.info("[Layer 2] 건너뜀 → 캐시 로드")
 
-    # ── Layer 3 ─ NLP ───────────────────────────────────────────
+    # Layer 3 NLP 
     if 3 not in skip:
         layer3         = NLPLayer()
         utterance_list = layer3.process(minutes_input)
@@ -713,7 +703,7 @@ def main():
         )["utterances"]
         log.info("[Layer 3] 건너뜀 → 캐시 로드")
 
-    # ── Layer 4 ─ 의미 분석 ─────────────────────────────────────
+    # Layer 4 의미 분석 
     if 4 not in skip:
         layer4       = SemanticLayer(api_key=args.openai_key)
         intent_model = layer4.process(utterance_list)
@@ -724,7 +714,7 @@ def main():
         )["@graph"]
         log.info("[Layer 4] 건너뜀 → 캐시 로드")
 
-    # ── Layer 5 ─ CC 매핑 ──────────────────────────────────────
+    # Layer 5 CC 매핑 
     if 5 not in skip:
         layer5 = CCMappingLayer(
             api_key=args.openai_key,
@@ -738,7 +728,7 @@ def main():
         )["@graph"]
         log.info("[Layer 5] 건너뜀 → 캐시 로드")
 
-    # ── Layer 6 ─ 누락 분석 ────────────────────────────────────
+    # Layer 6  누락 분석 
     if 6 not in skip:
         layer6 = MissingAnalysisLayer(*n4j)
         result = layer6.process(str(OUTPUT_DIR / "SecurityRequirementsList.jsonld"))
