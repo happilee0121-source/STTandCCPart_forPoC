@@ -623,9 +623,9 @@ class MissingAnalysisLayer:
         return {"matrix_rows": rows, "coverage_report": coverage}
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 공통 유틸리티
-# ══════════════════════════════════════════════════════════════════════════════
+
 def _now() -> str:
     return datetime.now().isoformat()
 
@@ -649,7 +649,6 @@ def _neo4j_connect(uri: str, user: str, password: str, layer: int):
     except Exception as e:
         log.warning("[Layer %d] Neo4j 연결 실패 (오프라인 모드): %s", layer, e)
         return None
-
 
 
 # CLI 진입점
