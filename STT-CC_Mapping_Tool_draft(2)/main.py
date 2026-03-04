@@ -3,7 +3,7 @@ STT-CC Mapping Tool — Full Pipeline Orchestrator
 레이어별 모듈을 순서대로 실행하는 메인 진입점
 사용법:
     python main.py --stt TranscriptSTT.txt [--openai-key sk-...] [--neo4j-uri bolt://...]
-환경변수로도 설정 가능:
+환경변수:
     OPENAI_API_KEY, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 """
 
@@ -32,7 +32,7 @@ log = logging.getLogger(__name__)
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-# CC Part2 전체 패밀리 기준 집합
+# CC Part2 전체 패밀리 기준 집합 (변경 예상)
 CC_PART2_ALL_FAMILIES = {
     "FAU": "Security Audit",
     "FCO": "Communication",
@@ -59,9 +59,8 @@ class InputLayer:
         if not self.filepath.exists():
             raise FileNotFoundError(f"STT 파일 없음: {self.filepath}")
         raw = self.filepath.read_text(encoding="utf-8")
-        log.info("[Layer 1] STT 파일 로드 완료 (%d chars)", len(raw))
+        log.info("Layer 1. STT 파일 로드 완료 (%d chars)", len(raw))
         return raw
-
 
 
 # Layer 2 · 전처리 (Pre-processing Layer)
@@ -135,7 +134,7 @@ class PreprocessingLayer:
                        ensure_ascii=False, indent=2),
             encoding="utf-8"
         )
-        log.info("[Layer 2] MinutesInput.json 저장: %s", path)
+        log.info("Layer 2. MinutesInput.json 저장: %s", path)
         return path
 
 
@@ -205,7 +204,7 @@ class NLPLayer:
                        ensure_ascii=False, indent=2),
             encoding="utf-8"
         )
-        log.info("[Layer 3] UtteranceList.json 저장: %s", path)
+        log.info("Layer 3. UtteranceList.json 저장: %s", path)
         return path
 
 
@@ -345,7 +344,7 @@ class CCMappingLayer:
         if p.exists():
             log.info("Layer 5. CC Controls 로드: %s", p)
             return json.loads(p.read_text(encoding="utf-8"))
-        log.warning("[Layer 5] CCpart2Controls.json 없음 → 기본값 사용")
+        log.warning("Layer 5. CCpart2Controls.json 없음 → 기본값 사용")
         return CC_PART2_ALL_FAMILIES
 
     def _call_mapping(self, batch: list, cc_controls: dict, start: int) -> list:
@@ -372,7 +371,7 @@ class CCMappingLayer:
         return items
 
     def _save_neo4j(self, reqs: list):
-        """5-6. Neo4j에 요구사항 ↔ CC Part2 관계 저장"""
+        """Neo4j에 요구사항 ↔ CC Part2 관계 저장"""
         if not self.neo4j_driver:
             return
         with self.neo4j_driver.session() as s:
@@ -388,7 +387,7 @@ class CCMappingLayer:
                      iid=r.get("intent_id", ""),
                      fid=r.get("CC_family_id", ""),
                      fname=r.get("CC_family_name", ""))
-        log.info("[Layer 5] Neo4j 저장: %d 요구사항", len(reqs))
+        log.info("Layer 5. Neo4j 저장: %d 요구사항", len(reqs))
 
     def _run_gds(self) -> list:
         """
@@ -416,10 +415,10 @@ class CCMappingLayer:
                     ORDER BY similarity DESC LIMIT 50
                 """)
                 scores = [dict(r) for r in res]
-            log.info("[Layer 5] GDS nodeSimilarity: %d 쌍", len(scores))
+            log.info("Layer 5. GDS nodeSimilarity: %d 쌍", len(scores))
             return scores
         except Exception as e:
-            log.warning("[Layer 5] GDS 오류: %s", e)
+            log.warning("Layer 5. GDS 오류: %s", e)
             return []
 
     def process(self, intents: list,
@@ -486,7 +485,7 @@ class MissingAnalysisLayer:
         """SecurityRequirementsList.jsonld 불러오기"""
         data = json.loads(Path(jsonld_path).read_text(encoding="utf-8"))
         reqs = data.get("@graph", [])
-        log.info("[Layer 6] 요구사항 로드: %d건", len(reqs))
+        log.info("Layer 6. 요구사항 로드: %d건", len(reqs))
         return reqs
 
     def _build_matrix(self, reqs: list) -> list:
@@ -675,7 +674,7 @@ def main():
     n4j   = (args.neo4j_uri, args.neo4j_user, args.neo4j_pass)
     t0    = time.time()
 
-    log.info("━━━ STT-CC Mapping Tool 파이프라인 시작 ━━━")
+    log.info("STT-CC Mapping Tool 파이프라인 시작")
 
     # Layer 1  입력 
     raw_text = InputLayer(args.stt).load()
