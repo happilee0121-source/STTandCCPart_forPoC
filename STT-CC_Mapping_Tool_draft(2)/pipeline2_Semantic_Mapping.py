@@ -13,11 +13,10 @@ OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 4. 의미 분석 (Semantic Layer)
 #    - GPT-4o로 발화를 REQUIRE / EXPLAIN / OPINION / DECISION 으로 분류
 #    - IntentModel.jsonld 출력
-# ══════════════════════════════════════════════════════════════════════════════
 
 class SemanticLayer:
     """Layer 4: GPT-4o Intent 분류 → IntentModel.jsonld"""
@@ -59,7 +58,7 @@ class SemanticLayer:
         except KeyError:
             raise EnvironmentError("환경변수 OPENAI_API_KEY를 설정하세요.")
 
-    # ── 내부 유틸 ──────────────────────────────
+    # 내부 유틸 
 
     def _call_gpt(self, utterances: list[dict]) -> list[dict]:
         """GPT-4o 호출 (배치 단위)"""
@@ -82,7 +81,7 @@ class SemanticLayer:
             raw = re.sub(r"```[a-z]*\n?", "", raw).replace("```", "").strip()
         return json.loads(raw)
 
-    # ── 메인 실행 ──────────────────────────────
+    # 메인 실행 
 
     def process(self, utterance_list: list[dict], batch_size: int = 20) -> list[dict]:
         """
@@ -117,7 +116,7 @@ class SemanticLayer:
                     })
                     intent_counter += 1
 
-        print(f"[Layer 4] 의미 분석 완료: {len(intent_model)}개 intent")
+        print(f"Layer 4. 의미 분석 완료: {len(intent_model)}개 intent")
         return intent_model
 
     def save(self, intent_model: list[dict]) -> Path:
@@ -136,15 +135,13 @@ class SemanticLayer:
         out_path = OUTPUT_DIR / "IntentModel.jsonld"
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(jsonld, f, ensure_ascii=False, indent=2)
-        print(f"[Layer 4] IntentModel.jsonld 저장: {out_path}")
+        print(f"Layer 4. IntentModel.jsonld 저장: {out_path}")
         return out_path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # 5. CC 표준 매핑 (CC Part2 Mapping Layer)
 #    - CCpart2Controls.json + IntentModel → SecurityRequirementsList.jsonld
 #    - Neo4j 저장, GDS nodeSimilarity, score 병합
-# ══════════════════════════════════════════════════════════════════════════════
 
 class CCMappingLayer:
     """Layer 5: CC Part2 매핑 → Neo4j → GDS → SecurityRequirementsList.jsonld"""
@@ -196,14 +193,14 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
                 neo4j_uri, auth=(neo4j_user, neo4j_password)
             )
             self.neo4j_driver.verify_connectivity()
-            print(f"[Layer 5] Neo4j 연결 완료: {neo4j_uri}")
+            print(f"Layer 5. Neo4j 연결 완료: {neo4j_uri}")
         except Exception as e:
             print(f"[Layer 5] Neo4j 연결 실패 (오프라인 모드): {e}")
             self.neo4j_driver = None
 
         self.neo4j_uri = neo4j_uri
 
-    # ── CC Part2 Controls 로드 ──────────────────
+    # CC Part2 Controls 로드 
 
     def _load_cc_controls(self, cc_path: str) -> dict:
         """5-1. CCpart2Controls.json 불러오기"""
@@ -213,7 +210,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
             return self._default_cc_families()
         with open(path, encoding="utf-8") as f:
             controls = json.load(f)
-        print(f"[Layer 5] CC Part2 Controls 로드: {path}")
+        print(f"Layer 5. CC Part2 Controls 로드: {path}")
         return controls
 
     @staticmethod
@@ -233,7 +230,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
             "FTP": "Trusted Path/Channels",
         }
 
-    # ── GPT 매핑 ───────────────────────────────
+    # GPT 매핑 
 
     def _call_gpt_mapping(self, require_intents: list[dict],
                           cc_controls: dict, req_counter_start: int) -> list[dict]:
@@ -268,12 +265,12 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
             item["requirement_id"] = f"REQ-{req_counter_start + idx:04d}"
         return results
 
-    # ── Neo4j ──────────────────────────────────
+    # Neo4j 
 
     def _save_to_neo4j(self, requirements: list[dict]) -> None:
         """5-6. Neo4j에 요구사항 ↔ CC Part2 관계 저장"""
         if not self.neo4j_driver:
-            print("[Layer 5] Neo4j 미연결 → 저장 건너뜀")
+            print("Layer 5. Neo4j 미연결 → 저장 건너뜀")
             return
 
         cypher = """
@@ -288,9 +285,9 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
         with self.neo4j_driver.session() as session:
             for req in requirements:
                 session.run(cypher, **req)
-        print(f"[Layer 5] Neo4j 저장 완료: {len(requirements)}개 요구사항")
+        print(f"Layer 5. Neo4j 저장 완료: {len(requirements)}개 요구사항")
 
-    # ── GDS ────────────────────────────────────
+    # GDS 
 
     def _run_gds(self) -> list[dict]:
         """
@@ -338,7 +335,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
         print(f"[Layer 5] GDS nodeSimilarity 완료: {len(scores)}개 쌍")
         return scores
 
-    # ── 메인 실행 ──────────────────────────────
+    # 메인 실행 
 
     def process(self, intent_model: list[dict],
                 cc_controls_path: str = "CCpart2Controls.json",
@@ -397,9 +394,8 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
         return out_path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 실행 진입점 (Layer 4-5)
-# ══════════════════════════════════════════════════════════════════════════════
 
 import re
 
