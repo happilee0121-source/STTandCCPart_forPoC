@@ -103,7 +103,7 @@ class SemanticLayer:
                     intent_model.append(item)
                 time.sleep(0.5)     # Rate limit 여유
             except Exception as e:
-                print(f"[Layer 4] GPT 호출 오류 (배치 {i//batch_size+1}): {e}")
+                print(f"Layer 4. GPT 호출 오류 (배치 {i//batch_size+1}): {e}")
                 # 오류 발화는 UNKNOWN으로 대체
                 for u in batch:
                     intent_model.append({
@@ -195,12 +195,12 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
             self.neo4j_driver.verify_connectivity()
             print(f"Layer 5. Neo4j 연결 완료: {neo4j_uri}")
         except Exception as e:
-            print(f"[Layer 5] Neo4j 연결 실패 (오프라인 모드): {e}")
+            print(f"Layer 5. Neo4j 연결 실패 (오프라인 모드): {e}")
             self.neo4j_driver = None
 
         self.neo4j_uri = neo4j_uri
 
-    # CC Part2 Controls 로드 
+    # CCPart2Controls 로드 
 
     def _load_cc_controls(self, cc_path: str) -> dict:
         """5-1. CCpart2Controls.json 불러오기"""
@@ -296,7 +296,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
         5-9. GDS_node_similarity (score) 반환
         """
         if not self.neo4j_driver:
-            print("[Layer 5] Neo4j 미연결 → GDS 건너뜀 (score=0.0)")
+            print("Layer 5. Neo4j 미연결 → GDS 건너뜀 (score=0.0)")
             return []
 
         with self.neo4j_driver.session() as session:
@@ -332,7 +332,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
             """)
             scores = [dict(r) for r in result]
 
-        print(f"[Layer 5] GDS nodeSimilarity 완료: {len(scores)}개 쌍")
+        print(f"Layer 5. GDS nodeSimilarity 완료: {len(scores)}개 쌍")
         return scores
 
     # 메인 실행 
@@ -346,7 +346,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
 
         # REQUIRE 유형만 필터링
         require_intents = [i for i in intent_model if i.get("intent_type") == "REQUIRE"]
-        print(f"[Layer 5] REQUIRE 발화 수: {len(require_intents)}")
+        print(f"Layer 5. REQUIRE 발화 수: {len(require_intents)}")
 
         requirements = []
         req_counter = 1
@@ -358,7 +358,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
                 req_counter += len(mapped)
                 time.sleep(0.5)
             except Exception as e:
-                print(f"[Layer 5] 매핑 오류 (배치 {i//batch_size+1}): {e}")
+                print(f"Layer 5. 매핑 오류 (배치 {i//batch_size+1}): {e}")
 
         # Neo4j 저장
         self._save_to_neo4j(requirements)
@@ -371,7 +371,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
         for req in requirements:
             req["gds_node_similarity"] = score_map.get(req["requirement_id"], None)
 
-        print(f"[Layer 5] CC 매핑 완료: {len(requirements)}개 요구사항")
+        print(f"Layer 5. CC 매핑 완료: {len(requirements)}개 요구사항")
         return requirements, gds_scores
 
     def save(self, requirements: list[dict]) -> Path:
@@ -390,7 +390,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
         out_path = OUTPUT_DIR / "SecurityRequirementsList.jsonld"
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(jsonld, f, ensure_ascii=False, indent=2)
-        print(f"[Layer 5] SecurityRequirementsList.jsonld 저장: {out_path}")
+        print(f"Layer 5. SecurityRequirementsList.jsonld 저장: {out_path}")
         return out_path
 
 
@@ -400,7 +400,7 @@ REQUIRE 발화 예시 → CC 매핑 예시 (Family Level):
 import re
 
 if __name__ == "__main__":
-    # Layer 4 ─ 의미 분석
+    # Layer 4. 의미 분석
     with open(OUTPUT_DIR / "UtteranceList.json", encoding="utf-8") as f:
         utterance_data = json.load(f)
     utterance_list = utterance_data["utterances"]
@@ -409,7 +409,7 @@ if __name__ == "__main__":
     intent_model = layer4.process(utterance_list)
     layer4.save(intent_model)
 
-    # Layer 5 ─ CC 매핑
+    # Layer 5. CC 매핑
     layer5 = CCMappingLayer(
         neo4j_uri="bolt://localhost:7687",
         neo4j_user="neo4j",
