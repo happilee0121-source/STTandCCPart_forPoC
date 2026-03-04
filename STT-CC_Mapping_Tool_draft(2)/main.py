@@ -55,7 +55,7 @@ class InputLayer:
         self.filepath = Path(filepath)
 
     def load(self) -> str:
-        """1-1. TranscriptSTT.txt 입력하기"""
+        """TranscriptSTT.txt 입력"""
         if not self.filepath.exists():
             raise FileNotFoundError(f"STT 파일 없음: {self.filepath}")
         raw = self.filepath.read_text(encoding="utf-8")
@@ -73,11 +73,11 @@ class PreprocessingLayer:
     _FILLERS = re.compile(r"\b(음+|어+|아+|그+|저+|뭐+|네+|예+|응+)\b")
 
     def __init__(self):
-        """2-1. Kiwi 한국어 형태소 분석기 불러오기"""
+        """Kiwi 한국어 형태소 분석기"""
         try:
             from kiwipiepy import Kiwi
             self.kiwi = Kiwi()
-            log.info("[Layer 2] Kiwi 형태소 분석기 초기화 완료")
+            log.info("Layer 2. Kiwi 형태소 분석기 초기화 완료")
         except ImportError:
             raise ImportError("pip install kiwipiepy")
 
@@ -110,8 +110,8 @@ class PreprocessingLayer:
 
     def process(self, raw: str) -> list:
         """
-        2-2. 잡음 제거, 파편화, 정규화
-        2-3. speaker, timestamp 포함 MinutesInput 생성
+        잡음 제거, 파편화, 정규화
+        speaker, timestamp 포함 MinutesInput 생성
         """
         minutes = []
         for idx, seg in enumerate(self._parse_lines(raw)):
@@ -124,11 +124,11 @@ class PreprocessingLayer:
                 "timestamp":  seg["timestamp"],
                 "text":       text,
             })
-        log.info("[Layer 2] 전처리 완료: %d 세그먼트", len(minutes))
+        log.info("Layer 2. 전처리 완료: %d 세그먼트", len(minutes))
         return minutes
 
     def save(self, minutes: list) -> Path:
-        """2-4. MinutesInput.json 출력"""
+        """MinutesInput.json 출력"""
         path = OUTPUT_DIR / "MinutesInput.json"
         path.write_text(
             json.dumps({"created_at": _now(), "segments": minutes},
@@ -148,12 +148,12 @@ class NLPLayer:
             from kiwipiepy.utils import Stopwords
             self.kiwi      = Kiwi()
             self.stopwords = Stopwords()
-            log.info("[Layer 3] Kiwi NLP 엔진 준비 완료")
+            log.info("Layer 3. Kiwi NLP 엔진 준비 완료")
         except ImportError:
             raise ImportError("pip install kiwipiepy")
 
     def _extract_noun_phrases(self, text: str) -> list:
-        """3-2. Kiwi CoNg 어절 분해 + 명사구 추출"""
+        """Kiwi CoNg 어절 분해 명사구 추출"""
         tokens = self.kiwi.tokenize(text, stopwords=self.stopwords)
         nps, cur = [], []
         for tok in tokens:
@@ -168,7 +168,7 @@ class NLPLayer:
         return list(dict.fromkeys(nps))
 
     def _dependency(self, text: str) -> list:
-        """3-3. Kiwi CoNg 의존 관계 분석"""
+        """Kiwi CoNg 의존 관계 분석"""
         try:
             return [
                 {"index": i, "form": t.form, "tag": str(t.tag),
@@ -180,9 +180,9 @@ class NLPLayer:
 
     def process(self, minutes: list) -> list:
         """
-        3-1. MinutesInput 입력
-        3-2/3-3. 명사구 추출 + 의존 관계 분석
-        3-4. utterance_id, speaker, timestamp 포함 UtteranceList 생성
+        MinutesInput 입력
+        명사구 추출 + 의존 관계 분석
+        utterance_id, speaker, timestamp 포함 UtteranceList 생성
         """
         result = []
         for seg in minutes:
@@ -194,11 +194,11 @@ class NLPLayer:
                 "noun_phrases": self._extract_noun_phrases(seg["text"]),
                 "dependency":   self._dependency(seg["text"]),
             })
-        log.info("[Layer 3] NLP 처리 완료: %d 발화", len(result))
+        log.info("Layer 3. NLP 처리 완료: %d 발화", len(result))
         return result
 
     def save(self, utterances: list) -> Path:
-        """3-5. UtteranceList.json 출력"""
+        """ UtteranceList.json 출력"""
         path = OUTPUT_DIR / "UtteranceList.json"
         path.write_text(
             json.dumps({"created_at": _now(), "utterances": utterances},
@@ -227,11 +227,11 @@ class SemanticLayer:
 """.strip()
 
     def __init__(self, api_key=None):
-        """4-1. OpenAI API(GPT-4o) 불러오기"""
+        """ OpenAI API GPT4-o"""
         try:
             from openai import OpenAI
             self.client = OpenAI(api_key=api_key or os.environ["OPENAI_API_KEY"])
-            log.info("[Layer 4] OpenAI API 초기화 완료")
+            log.info("Layer 4. OpenAI API 초기화 완료")
         except ImportError:
             raise ImportError("pip install openai")
         except KeyError:
@@ -254,9 +254,9 @@ class SemanticLayer:
 
     def process(self, utterances: list, batch_size: int = 20) -> list:
         """
-        4-2. GPT-4o에 UtteranceList 입력
-        4-3. REQUIRE / EXPLAIN / OPINION / DECISION 의미 구분
-        4-4. intent_id, intent_type, source_utterance, confidence 포함 IntentModel 생성
+        GPT-4o에 UtteranceList 입력
+        REQUIRE / EXPLAIN / OPINION / DECISION 의미 구분
+        intent_id, intent_type, source_utterance, confidence 포함 IntentModel 생성
         """
         intents, counter = [], 1
         for i in range(0, len(utterances), batch_size):
@@ -281,7 +281,7 @@ class SemanticLayer:
                         "reasoning":        str(e),
                     })
                     counter += 1
-        log.info("[Layer 4] 의미 분석 완료: %d intent", len(intents))
+        log.info("Layer 4. 의미 분석 완료: %d intent", len(intents))
         return intents
 
     def save(self, intents: list) -> Path:
@@ -301,7 +301,7 @@ class SemanticLayer:
             }, ensure_ascii=False, indent=2),
             encoding="utf-8"
         )
-        log.info("[Layer 4] IntentModel.jsonld 저장: %s", path)
+        log.info("Layer 4. IntentModel.jsonld 저장: %s", path)
         return path
 
 
@@ -340,19 +340,19 @@ class CCMappingLayer:
         self.neo4j_driver = _neo4j_connect(neo4j_uri, neo4j_user, neo4j_password, layer=5)
 
     def _load_cc_controls(self, path: str) -> dict:
-        """5-1. CCpart2Controls.json 불러오기"""
+        """CCpart2Controls.json"""
         p = Path(path)
         if p.exists():
-            log.info("[Layer 5] CC Controls 로드: %s", p)
+            log.info("Layer 5. CC Controls 로드: %s", p)
             return json.loads(p.read_text(encoding="utf-8"))
         log.warning("[Layer 5] CCpart2Controls.json 없음 → 기본값 사용")
         return CC_PART2_ALL_FAMILIES
 
     def _call_mapping(self, batch: list, cc_controls: dict, start: int) -> list:
         """
-        5-2. GPT-4o에 IntentModel 입력
-        5-3. CC Part2 매핑 예시 입력
-        5-4. Intent ↔ CC Part2 매핑 결과 생성
+        GPT-4o에 IntentModel 입력
+        CC Part2 매핑 예시 입력
+        Intent ↔ CC Part2 매핑 결과 생성
         """
         user_msg = (
             f"CC Part2 Families:\n{json.dumps(cc_controls, ensure_ascii=False, indent=2)}\n\n"
@@ -392,9 +392,9 @@ class CCMappingLayer:
 
     def _run_gds(self) -> list:
         """
-        5-7. GDS graph projection 생성
-        5-8. gds.nodeSimilarity 실행
-        5-9. GDS_node_similarity (score) 반환
+        GDS graph projection 생성
+        gds.nodeSimilarity 실행
+        GDS_node_similarity (score) 반환
         """
         if not self.neo4j_driver:
             return []
@@ -425,7 +425,7 @@ class CCMappingLayer:
     def process(self, intents: list,
                 cc_path: str = "CCpart2Controls.json",
                 batch_size: int = 20):
-        """5-1 ~ 5-10. CC 매핑 전체"""
+        """CC 매핑 전반"""
         cc_controls     = self._load_cc_controls(cc_path)
         require_intents = [i for i in intents if i.get("intent_type") == "REQUIRE"]
         log.info("[Layer 5] REQUIRE 발화: %d건", len(require_intents))
@@ -439,7 +439,7 @@ class CCMappingLayer:
                 counter += len(mapped)
                 time.sleep(0.5)
             except Exception as e:
-                log.warning("[Layer 5] 매핑 오류 (batch %d): %s",
+                log.warning("Layer 5. 매핑 오류 (batch %d): %s",
                             i // batch_size + 1, e)
 
         self._save_neo4j(reqs)
@@ -450,11 +450,11 @@ class CCMappingLayer:
         for r in reqs:
             r["gds_node_similarity"] = score_map.get(r["requirement_id"])
 
-        log.info("[Layer 5] CC 매핑 완료: %d 요구사항", len(reqs))
+        log.info("Layer 5. CC 매핑 완료: %d 요구사항", len(reqs))
         return reqs, gds_scores
 
     def save(self, reqs: list) -> Path:
-        """5-5. requirement_id, intent_id, source_utterance, CC_family_id 포함
+        """requirement_id, intent_id, source_utterance, CC_family_id 포함
                SecurityRequirementsList.jsonld 출력"""
         path = OUTPUT_DIR / "SecurityRequirementsList.jsonld"
         path.write_text(
@@ -471,7 +471,7 @@ class CCMappingLayer:
             }, ensure_ascii=False, indent=2),
             encoding="utf-8"
         )
-        log.info("[Layer 5] SecurityRequirementsList.jsonld 저장: %s", path)
+        log.info("Layer 5. SecurityRequirementsList.jsonld 저장: %s", path)
         return path
 
 
@@ -483,7 +483,7 @@ class MissingAnalysisLayer:
         self.neo4j_driver = _neo4j_connect(neo4j_uri, neo4j_user, neo4j_password, layer=6)
 
     def _load(self, jsonld_path: str) -> list:
-        """6-1. SecurityRequirementsList.jsonld 불러오기"""
+        """SecurityRequirementsList.jsonld 불러오기"""
         data = json.loads(Path(jsonld_path).read_text(encoding="utf-8"))
         reqs = data.get("@graph", [])
         log.info("[Layer 6] 요구사항 로드: %d건", len(reqs))
@@ -491,7 +491,7 @@ class MissingAnalysisLayer:
 
     def _build_matrix(self, reqs: list) -> list:
         """
-        6-2. requirement_id, intent_id, source_utterance,
+        requirement_id, intent_id, source_utterance,
              CC_family_id, missing_CC 포함
              Requirements-CCPart2 Mapping Matrix 생성
         """
@@ -509,13 +509,13 @@ class MissingAnalysisLayer:
                 "missing_CC":          missing_global,
                 "gds_node_similarity": r.get("gds_node_similarity"),
             })
-        log.info("[Layer 6] 매핑 매트릭스: %d행", len(rows))
+        log.info("Layer 6. 매핑 매트릭스: %d행", len(rows))
         return rows
 
     def _coverage(self, rows: list) -> dict:
         """
-        6-3. Requirements-CCPart2 Mapping Matrix 바탕으로 커버리지 계산
-        6-4. coverage_hit 반환
+        Requirements-CCPart2 Mapping Matrix 바탕으로 커버리지 계산
+        coverage_hit 반환
         """
         covered = {r["CC_family_id"] for r in rows} & CC_PART2_ALL_FAMILIES.keys()
         missing = sorted(CC_PART2_ALL_FAMILIES.keys() - covered)
@@ -527,14 +527,14 @@ class MissingAnalysisLayer:
             "coverage_hit":      hit,
             "coverage_hit_pct":  f"{hit*100:.1f}%",
         }
-        log.info("[Layer 6] Coverage: %s (%d/%d families)",
+        log.info("Coverage: %s (%d/%d families)",
                  report["coverage_hit_pct"], len(covered), len(CC_PART2_ALL_FAMILIES))
-        log.info("[Layer 6] Missing CC Families: %s", missing)
+        log.info("Layer 6. Missing CC Families: %s", missing)
         return report
 
     def _save_neo4j(self, rows: list, coverage: dict):
         """
-        6-5. Neo4j에 요구사항 ↔ CC Part2 관계,
+        Neo4j에 요구사항 ↔ CC Part2 관계,
              누락 요구사항, CC Part2 커버리지 저장
         """
         if not self.neo4j_driver:
@@ -561,7 +561,7 @@ class MissingAnalysisLayer:
                  covered=json.dumps(coverage["covered_families"]),
                  missing=json.dumps(coverage["missing_families"]),
                  ts=_now())
-        log.info("[Layer 6] Neo4j 저장 완료 (누락 + 커버리지)")
+        log.info("Layer 6. Neo4j 저장 완료 (누락 + 커버리지)")
 
     def _save_jsonld(self, rows: list, coverage: dict) -> Path:
         """Requirements-CCPart2 Mapping Matrix.jsonld 저장"""
@@ -582,11 +582,11 @@ class MissingAnalysisLayer:
             }, ensure_ascii=False, indent=2),
             encoding="utf-8"
         )
-        log.info("[Layer 6] MappingMatrix.jsonld 저장: %s", path)
+        log.info("Layer 6. MappingMatrix.jsonld 저장: %s", path)
         return path
 
     def _save_csv(self, rows: list, coverage: dict) -> Path:
-        """6-6. Requirements-CCPart2 Mapping Matrix.csv 출력"""
+        """Requirements-CCPart2 Mapping Matrix.csv 출력"""
         path   = OUTPUT_DIR / "Requirements-CCPart2_MappingMatrix.csv"
         fields = [
             "requirement_id", "intent_id", "source_utterance",
@@ -607,7 +607,7 @@ class MissingAnalysisLayer:
                     "gds_node_similarity": row.get("gds_node_similarity", ""),
                     "coverage_hit":        coverage["coverage_hit"],
                 })
-        log.info("[Layer 6] MappingMatrix.csv 저장: %s", path)
+        log.info("Layer 6. MappingMatrix.csv 저장: %s", path)
         return path
 
     def process(self, jsonld_path: str = "output/SecurityRequirementsList.jsonld") -> dict:
@@ -689,7 +689,7 @@ def main():
         minutes_input = json.loads(
             (OUTPUT_DIR / "MinutesInput.json").read_text(encoding="utf-8")
         )["segments"]
-        log.info("[Layer 2] 건너뜀 → 캐시 로드")
+        log.info("Layer 2. 건너뜀 → 캐시 로드")
 
     # Layer 3 NLP 
     if 3 not in skip:
@@ -700,7 +700,7 @@ def main():
         utterance_list = json.loads(
             (OUTPUT_DIR / "UtteranceList.json").read_text(encoding="utf-8")
         )["utterances"]
-        log.info("[Layer 3] 건너뜀 → 캐시 로드")
+        log.info("Layer 3. 건너뜀 → 캐시 로드")
 
     # Layer 4 의미 분석 
     if 4 not in skip:
@@ -711,7 +711,7 @@ def main():
         intent_model = json.loads(
             (OUTPUT_DIR / "IntentModel.jsonld").read_text(encoding="utf-8")
         )["@graph"]
-        log.info("[Layer 4] 건너뜀 → 캐시 로드")
+        log.info("Layer 4. 건너뜀 → 캐시 로드")
 
     # Layer 5 CC 매핑 
     if 5 not in skip:
@@ -725,7 +725,7 @@ def main():
         requirements = json.loads(
             (OUTPUT_DIR / "SecurityRequirementsList.jsonld").read_text(encoding="utf-8")
         )["@graph"]
-        log.info("[Layer 5] 건너뜀 → 캐시 로드")
+        log.info("Layer 5. 건너뜀 → 캐시 로드")
 
     # Layer 6  누락 분석 
     if 6 not in skip:
@@ -733,12 +733,12 @@ def main():
         result = layer6.process(str(OUTPUT_DIR / "SecurityRequirementsList.jsonld"))
 
         cr = result["coverage_report"]
-        log.info("━━━ 최종 커버리지 요약 ━━━")
+        log.info("최종 커버리지 요약")
         log.info("  Coverage Hit : %s", cr["coverage_hit_pct"])
         log.info("  Covered      : %s", cr["covered_families"])
         log.info("  Missing      : %s", cr["missing_families"])
 
-    log.info("━━━ 전체 파이프라인 완료 (%.1fs) ━━━", time.time() - t0)
+    log.info("전체 파이프라인 완료 (%.1fs)", time.time() - t0)
     log.info("출력 디렉토리: %s", OUTPUT_DIR.resolve())
 
 
