@@ -31,7 +31,7 @@ class InputLayer:
             raise FileNotFoundError(f"STT 파일을 찾을 수 없습니다: {self.filepath}")
         with open(self.filepath, encoding="utf-8") as f:
             raw = f.read()
-        print(f"[Layer 1] STT 파일 로드 완료: {self.filepath} ({len(raw)} chars)")
+        print(f"Layer 1. STT 파일 로드 완료: {self.filepath} ({len(raw)} chars)")
         return raw
 
 
@@ -51,7 +51,7 @@ class PreprocessingLayer:
         try:
             from kiwipiepy import Kiwi
             self.kiwi = Kiwi()
-            print("[Layer 2] Kiwi 형태소 분석기 초기화 완료")
+            print("Layer 2. Kiwi 형태소 분석기 초기화 완료")
         except ImportError:
             raise ImportError("kiwipiepy 패키지가 필요합니다: pip install kiwipiepy")
 
@@ -123,7 +123,7 @@ class PreprocessingLayer:
                 "text":       normalized,
             })
 
-        print(f"[Layer 2] 전처리 완료: {len(minutes_input)}개 세그먼트")
+        print(f"Layer 2. 전처리 완료: {len(minutes_input)}개 세그먼트")
         return minutes_input
 
     def save(self, minutes_input: list[dict]) -> Path:
@@ -134,7 +134,7 @@ class PreprocessingLayer:
                 {"created_at": datetime.now().isoformat(), "segments": minutes_input},
                 f, ensure_ascii=False, indent=2
             )
-        print(f"[Layer 2] MinutesInput.json 저장: {out_path}")
+        print(f"Layer 2. MinutesInput.json 저장: {out_path}")
         return out_path
 
 
@@ -151,7 +151,7 @@ class NLPLayer:
             from kiwipiepy.utils import Stopwords
             self.kiwi = Kiwi()
             self.stopwords = Stopwords()
-            print("[Layer 3] Kiwi NLP 엔진 초기화 완료")
+            print("Layer 3. Kiwi NLP 엔진 초기화 완료")
         except ImportError:
             raise ImportError("kiwipiepy 패키지가 필요합니다: pip install kiwipiepy")
 
@@ -217,7 +217,7 @@ class NLPLayer:
                 "dependency":    dependency,
             })
 
-        print(f"[Layer 3] NLP 처리 완료: {len(utterance_list)}개 발화")
+        print(f"Layer 3. NLP 처리 완료: {len(utterance_list)}개 발화")
         return utterance_list
 
     def save(self, utterance_list: list[dict]) -> Path:
@@ -228,7 +228,7 @@ class NLPLayer:
                 {"created_at": datetime.now().isoformat(), "utterances": utterance_list},
                 f, ensure_ascii=False, indent=2
             )
-        print(f"[Layer 3] UtteranceList.json 저장: {out_path}")
+        print(f"Layer 3. UtteranceList.json 저장: {out_path}")
         return out_path
 
 
