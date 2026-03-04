@@ -9,17 +9,15 @@ import os
 from pathlib import Path
 from datetime import datetime
 
-# ─────────────────────────────────────────────
+
 # 공통 설정
-# ─────────────────────────────────────────────
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 1. 입력 데이터 (Input Layer)
-#    - TranscriptSTT.txt 파일을 읽어 raw 텍스트로 반환
-# ══════════════════════════════════════════════════════════════════════════════
+#    - TranscriptSTT.txt 파일을 읽어 raw 텍스트로 반환 
 
 class InputLayer:
     """Layer 1: TranscriptSTT.txt 로드"""
@@ -37,10 +35,8 @@ class InputLayer:
         return raw
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # 2. 전처리 (Pre-processing Layer)
 #    - Kiwi 형태소 분석기로 잡음 제거 · 정규화 후 MinutesInput.json 출력
-# ══════════════════════════════════════════════════════════════════════════════
 
 class PreprocessingLayer:
     """Layer 2: 잡음 제거 → 정규화 → MinutesInput.json"""
@@ -59,7 +55,8 @@ class PreprocessingLayer:
         except ImportError:
             raise ImportError("kiwipiepy 패키지가 필요합니다: pip install kiwipiepy")
 
-    # ── 내부 유틸 ──────────────────────────────
+    
+    # 내부 유틸리티 
 
     def _remove_noise(self, text: str) -> str:
         """잡음 제거: 필러어, 반복어, 특수문자 정리"""
@@ -103,7 +100,8 @@ class PreprocessingLayer:
                     segments[-1]["text"] += " " + line
         return segments
 
-    # ── 메인 실행 ──────────────────────────────
+    
+    # 메인 실행 
 
     def process(self, raw: str) -> list[dict]:
         """
@@ -140,11 +138,9 @@ class PreprocessingLayer:
         return out_path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 # 3. 자연어 처리 (NLP Layer)
 #    - Kiwi CoNg로 어절 분해 · 명사구 추출 · 의존 관계 분석
 #    - utterance_id, speaker, timestamp 포함 → UtteranceList.json 출력
-# ══════════════════════════════════════════════════════════════════════════════
 
 class NLPLayer:
     """Layer 3: Kiwi CoNg 기반 NLP → UtteranceList.json"""
@@ -159,7 +155,7 @@ class NLPLayer:
         except ImportError:
             raise ImportError("kiwipiepy 패키지가 필요합니다: pip install kiwipiepy")
 
-    # ── 내부 유틸 ──────────────────────────────
+    # 내부 유틸리티 
 
     def _extract_noun_phrases(self, text: str) -> list[str]:
         """3-2. Kiwi CoNg로 어절 분해 + 명사구 추출"""
@@ -199,7 +195,7 @@ class NLPLayer:
         except Exception as e:
             return [{"error": str(e)}]
 
-    # ── 메인 실행 ──────────────────────────────
+    # 메인 실행 
 
     def process(self, minutes_input: list[dict]) -> list[dict]:
         """
@@ -236,25 +232,24 @@ class NLPLayer:
         return out_path
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 실행 진입점 (Layer 1-3)
-# ══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     import sys
 
     stt_path = sys.argv[1] if len(sys.argv) > 1 else "TranscriptSTT.txt"
 
-    # Layer 1 ─ 입력
+    # Layer 1. 입력
     layer1 = InputLayer(stt_path)
     raw_text = layer1.load()
 
-    # Layer 2 ─ 전처리
+    # Layer 2. 전처리
     layer2 = PreprocessingLayer()
     minutes_input = layer2.process(raw_text)
     layer2.save(minutes_input)
 
-    # Layer 3 ─ NLP
+    # Layer 3. 자연어처리 
     layer3 = NLPLayer()
     utterance_list = layer3.process(minutes_input)
     layer3.save(utterance_list)
