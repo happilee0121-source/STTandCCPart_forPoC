@@ -32,9 +32,8 @@ CC_PART2_ALL_FAMILIES = {
 }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 6. 누락 요구사항 감지 (Missing Analysis Layer)
-# ══════════════════════════════════════════════════════════════════════════════
 
 class MissingAnalysisLayer:
     """Layer 6: 매핑 매트릭스 생성 → 커버리지 계산 → 누락 감지 → 저장/출력"""
@@ -51,12 +50,12 @@ class MissingAnalysisLayer:
                 neo4j_uri, auth=(neo4j_user, neo4j_password)
             )
             self.neo4j_driver.verify_connectivity()
-            print(f"[Layer 6] Neo4j 연결 완료: {neo4j_uri}")
+            print(f"Layer 6. Neo4j 연결 완료: {neo4j_uri}")
         except Exception as e:
-            print(f"[Layer 6] Neo4j 연결 실패 (오프라인 모드): {e}")
+            print(f"Layer 6. Neo4j 연결 실패 (오프라인 모드): {e}")
             self.neo4j_driver = None
 
-    # ── 로드 ───────────────────────────────────
+    # 로드 
 
     def _load_security_requirements(self, jsonld_path: str) -> list[dict]:
         """6-1. SecurityRequirementsList.jsonld 불러오기"""
@@ -64,10 +63,10 @@ class MissingAnalysisLayer:
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
         requirements = data.get("@graph", [])
-        print(f"[Layer 6] SecurityRequirementsList 로드: {len(requirements)}개 요구사항")
+        print(f"Layer 6. SecurityRequirementsList 로드: {len(requirements)}개 요구사항")
         return requirements
 
-    # ── 매트릭스 생성 ──────────────────────────
+    # 매트릭스 생성 
 
     def _build_mapping_matrix(self, requirements: list[dict]) -> list[dict]:
         """
@@ -97,10 +96,10 @@ class MissingAnalysisLayer:
                 "gds_node_similarity": req.get("gds_node_similarity"),
             })
 
-        print(f"[Layer 6] 매핑 매트릭스 생성: {len(matrix_rows)}행")
+        print(f"Layer 6. 매핑 매트릭스 생성: {len(matrix_rows)}행")
         return matrix_rows
 
-    # ── 커버리지 계산 ──────────────────────────
+    # 커버리지 계산 
 
     def _calculate_coverage(self, matrix_rows: list[dict]) -> dict:
         """
@@ -124,12 +123,12 @@ class MissingAnalysisLayer:
             "coverage_hit_pct":    f"{coverage_hit * 100:.1f}%",
         }
 
-        print(f"[Layer 6] CC Part2 커버리지: {coverage_report['coverage_hit_pct']} "
+        print(f"Layer 6. CC Part2 커버리지: {coverage_report['coverage_hit_pct']} "
               f"({covered_count}/{total_families} families)")
-        print(f"[Layer 6] 누락 CC Family: {missing_families}")
+        print(f"Layer 6. 누락 CC Family: {missing_families}")
         return coverage_report
 
-    # ── Neo4j 저장 ─────────────────────────────
+    # Neo4j 저장 
 
     def _save_to_neo4j(self, matrix_rows: list[dict], coverage_report: dict) -> None:
         """
@@ -169,9 +168,9 @@ class MissingAnalysisLayer:
                 ts=datetime.now().isoformat()
             )
 
-        print("[Layer 6] Neo4j 저장 완료 (누락 요구사항 + 커버리지)")
+        print("Layer 6. Neo4j 저장 완료 (누락 요구사항 + 커버리지)")
 
-    # ── 출력 ───────────────────────────────────
+    # 출력 
 
     def _save_jsonld(self, matrix_rows: list[dict], coverage_report: dict) -> Path:
         """Requirements-CCPart2 Mapping Matrix.jsonld 저장"""
@@ -219,10 +218,10 @@ class MissingAnalysisLayer:
                     "coverage_hit":        coverage_report["coverage_hit"],
                 })
 
-        print(f"[Layer 6] MappingMatrix.csv 저장: {out_path}")
+        print(f"Layer 6. MappingMatrix.csv 저장: {out_path}")
         return out_path
 
-    # ── 메인 실행 ──────────────────────────────
+    # 메인 실행 
 
     def process(self,
                 jsonld_path: str = "output/SecurityRequirementsList.jsonld") -> dict:
@@ -256,9 +255,8 @@ class MissingAnalysisLayer:
         }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # 실행 진입점 (Layer 6)
-# ══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     layer6 = MissingAnalysisLayer(
