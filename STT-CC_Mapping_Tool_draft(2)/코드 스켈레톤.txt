@@ -1,0 +1,48 @@
+나는 '보안 요구사항 회의를 CC 표준에 매핑하고 누락 보안 요구사항을 알리는 도구'를 개발하고 있어. 현재 PoC를 위해 도구를 설계 중이야. 
+먼저 기술스택정의서를 첨부할게. 
+그리고 아래는 내가 만들 도구의 프로세스 및 워크플로우야. 
+이 둘을 반영해서 오류 없게 실행될 수 있는 파이썬 코드를 작성해줄래? 
+코드는 풀코드이거나 분리되거나 상관 없어. 대신 코드 스켈레톤이 아래와 같이 잘 드러나게 작성해주면 좋겠어.  
+
+1. 입력 데이터 (Input Layer) 
+1-1. TranscriptSTT.txt 입력하기 
+
+2. 전처리 (Pre-proecessing Layer) 
+2-1. Kiwi 한국어 형태소 분석기 불러오기 
+2-2. TranscriptSTT 잡음 제거, 파편화, 정규화 하기 
+2-3. speaker, timestamp 포함해서 MinutesInput 만들기 
+2-4. MinutesInput.json 출력하기 
+
+3. 자연어 처리 (NLP Layer) 
+3-1. MinutesInput 입력하기 
+3-2. Kiwi CoNg로 어절 분해, 명사구 추출하기 
+3-3. Kiwi CoNg로 의존 관계 분석하기 
+3-4. utterance_id, speaker, timestamp 포함해서 UtteranceList 만들기 
+3-5. UtteranceList.json 출력하기 
+
+4. 의미 분석 (Semantic Layer) 
+4-1. OpenAI API(GPT-4o) 불러오기 
+4-2. GPT-4o에 UtteranceList 입력하기 
+4-3. Utterance를 REQIRE(요구사항), EXPLAIN(설명), OPINION(단순의견), DECISION(결정사항) 등으로 의미 구분하기 
+4-4. intent_id, intent_type, source_utterance, confidence를 포함해서 IntentModel 만들기 
+4-5. IntentModel.jsonld 출력하기 
+
+5. CC 표준 메핑 (CC Part2 Mapping Layer) 
+5-1. CCpart2Controls.json 불러오기 
+5-2. GPT-4o에 IntentModel 입력하기 
+5-3. GPT-4o에 Intent와 CC Part2 Controls를 CC Family Level 기준으로 매핑한 예시 입력하기 
+5-4. GPT-4o를 통해 Intent Model ⇔ CC Part2 Controls 매핑 결과 생성하기 
+5-5. requirement_id, intent_id, source_utterance, CC_family_id를 포함해 SecurityRequirementsList.jsonld 출력하기 
+5-6. Neo4j에 요구사항과 CC Part2의 관계를 포함하는 SecurityRequirementsList를 저장하기 
+5-7. GDS graph projection 생성하기 
+5-8. gds.nodeSimilarity 실행하기 
+5-9. GDS_node_similarity (score) 반환하기 
+5-10. JSON-LD에 병합하기 
+
+6. 누락 요구사항 감지 (Missing Analysis Layer) 
+6-1. SecurityRequirementsList.jsonld 불러오기 
+6-2. requirement_id, intent_id, source_utterance, CC_family_id, missing_CC를 포함한 Requirements-CCPart2 Mapping Matrix.jsonld 만들기 
+6-3. Requirements-CCPart2 Mapping Matrix 바탕으로 커버리지 계산하기 
+6-4. 요구사항의 CC Part2 커버리지를 나타내는 coverage_hit 반환하기 
+6-5. Neo4j에 요구사항과 CC Part2의 관계, 누락된 요구사항, 요구사항의 CC Part2 커버리지를 포함하는 Requirements-CCPart2 Mapping Matrix.jsonld를 저장하기 
+6-6. Requirements-CCPart2 Mapping Matrix.json를 csv로 출력하기 
