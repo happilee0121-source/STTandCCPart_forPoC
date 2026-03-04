@@ -1,7 +1,7 @@
-# STT-CC Mapping Tool — Python 의존성 (Python 3.10+)
-kiwipiepy>=0.17.1
-openai>=1.30.0
-neo4j>=5.19.0
+# Python 3.10+
+# kiwipiepy>=0.17.1
+# openai>=1.30.0
+# neo4j>=5.19.0
 
 
 # 의존성 설치
@@ -10,5 +10,5 @@ pip install -r requirements.txt
 # 전체 파이프라인 실행
 python main.py --stt TranscriptSTT.txt --openai-key sk-... --neo4j-uri bolt://localhost:7687
 
-# 특정 레이어 건너뛰기 (캐시 활용)
+# 특정 레이어 건너뛰기 
 python main.py --stt TranscriptSTT.txt --skip-layers 4 5 6
