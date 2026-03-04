@@ -1,8 +1,4 @@
-나는 '보안 요구사항 회의를 CC 표준에 매핑하고 누락 보안 요구사항을 알리는 도구'를 개발하고 있어. 현재 PoC를 위해 도구를 설계 중이야. 
-먼저 기술스택정의서를 첨부할게. 
-그리고 아래는 내가 만들 도구의 프로세스 및 워크플로우야. 
-이 둘을 반영해서 오류 없게 실행될 수 있는 파이썬 코드를 작성해줄래? 
-코드는 풀코드이거나 분리되거나 상관 없어. 대신 코드 스켈레톤이 아래와 같이 잘 드러나게 작성해주면 좋겠어.  
+
 
 1. 입력 데이터 (Input Layer) 
 1-1. TranscriptSTT.txt 입력하기 
@@ -45,4 +41,5 @@
 6-3. Requirements-CCPart2 Mapping Matrix 바탕으로 커버리지 계산하기 
 6-4. 요구사항의 CC Part2 커버리지를 나타내는 coverage_hit 반환하기 
 6-5. Neo4j에 요구사항과 CC Part2의 관계, 누락된 요구사항, 요구사항의 CC Part2 커버리지를 포함하는 Requirements-CCPart2 Mapping Matrix.jsonld를 저장하기 
+
 6-6. Requirements-CCPart2 Mapping Matrix.json를 csv로 출력하기 
