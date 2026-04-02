@@ -16,9 +16,9 @@ from dataclasses import dataclass, field, asdict
 from typing import Optional
 from enum import Enum
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # 외부 라이브러리 임포트 (없으면 mock으로 대체)
-# ─────────────────────────────────────────────────────────────────────────────
+
 try:
     import anthropic
     ANTHROPIC_AVAILABLE = True
@@ -48,9 +48,7 @@ except ImportError:
     print("[WARNING] z3-solver 없음 → 규칙 기반 의미 검증으로 대체")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # 데이터 스키마 정의
-# ─────────────────────────────────────────────────────────────────────────────
 
 class IntentType(str, Enum):
     REQUIREMENT  = "requirement"
@@ -97,9 +95,7 @@ class PipelineResult:
     explanation:         dict = field(default_factory=dict)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # CC Part2 SFR 지식베이스 (내장 RAG 데이터베이스)
-# ─────────────────────────────────────────────────────────────────────────────
 
 CC_SFR_DATABASE = [
     # FAU – Security Audit
@@ -223,9 +219,8 @@ CC_SFR_DATABASE = [
      "keywords": ["resource quota", "maximum quota", "자원 할당", "쿼터"]},
 ]
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # CC 도메인 규칙 (Rule-based Filter)
-# ─────────────────────────────────────────────────────────────────────────────
 
 DOMAIN_RULES = {
     "authentication":   ["FIA_UAU", "FIA_UID", "FIA_ATD"],
@@ -260,9 +255,8 @@ SECURITY_KEYWORD_DOMAIN_MAP = {
     "가용성": "availability",     "availability": "availability",
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # JSON Schema (Requirement Extractor 강제 구조)
-# ─────────────────────────────────────────────────────────────────────────────
 
 REQUIREMENT_JSON_SCHEMA = {
     "type": "object",
@@ -279,9 +273,8 @@ REQUIREMENT_JSON_SCHEMA = {
     "additionalProperties": False,
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # 유틸리티 함수
-# ─────────────────────────────────────────────────────────────────────────────
 
 def cosine_similarity_pure(vec_a: list[float], vec_b: list[float]) -> float:
     """numpy 없이 코사인 유사도 계산"""
@@ -306,9 +299,7 @@ def build_vocab(texts: list[str]) -> list[str]:
     return sorted(vocab)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 1: NLP Filter
-# ─────────────────────────────────────────────────────────────────────────────
 
 class NLPFilter:
     """발화 의미 단위화 및 노이즈 제거"""
@@ -363,9 +354,7 @@ class NLPFilter:
         return units
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 2: Intent Filter
-# ─────────────────────────────────────────────────────────────────────────────
 
 class IntentFilter:
     """발화 의도 분류: requirement / opinion / explanation / decision / other"""
@@ -417,9 +406,7 @@ class IntentFilter:
         return results
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 3: Requirement Extractor
-# ─────────────────────────────────────────────────────────────────────────────
 
 class RequirementExtractor:
     """자연어 → JSON Schema 강제 구조 추출"""
@@ -505,9 +492,7 @@ class RequirementExtractor:
         return requirements
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 4: Requirement Validator
-# ─────────────────────────────────────────────────────────────────────────────
 
 class RequirementValidator:
     """JSON Schema 형식 검증 + z3 기반 의미 검증"""
@@ -592,9 +577,7 @@ class RequirementValidator:
         return requirements
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 5: CC Candidate Retrieval (RAG)
-# ─────────────────────────────────────────────────────────────────────────────
 
 class CCCandidateRetriever:
     """RAG 임베딩 데이터베이스 기반 CC SFR 후보 검색"""
@@ -638,9 +621,7 @@ class CCCandidateRetriever:
         return candidates
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 6: Rule-based Filter (CC Part2 SFR 도메인 제약)
-# ─────────────────────────────────────────────────────────────────────────────
 
 class RuleBasedFilter:
     """도메인 규칙으로 CC 후보 정제"""
@@ -676,9 +657,7 @@ class RuleBasedFilter:
         return filtered if filtered else candidates
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 7: LLM Selector
-# ─────────────────────────────────────────────────────────────────────────────
 
 class LLMSelector:
     """Anthropic API를 이용하여 최종 CC SFR 매핑 항목 선택"""
@@ -746,9 +725,7 @@ JSON 형식으로만 응답하세요 (마크다운 없이):
         }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 8: Confidence Scoring
-# ─────────────────────────────────────────────────────────────────────────────
 
 class ConfidenceScorer:
     """매핑 결과 신뢰도 산출"""
@@ -772,9 +749,7 @@ class ConfidenceScorer:
         return round(max(0.0, min(1.0, final)), 4)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 9: Missing Requirement Detector
-# ─────────────────────────────────────────────────────────────────────────────
 
 class MissingRequirementDetector:
     """CC Component Level 커버리지 기반 누락 요구사항 탐지"""
@@ -845,9 +820,7 @@ class MissingRequirementDetector:
         return missing, round(coverage, 4)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # STAGE 10: Structured Output
-# ─────────────────────────────────────────────────────────────────────────────
 
 class StructuredOutputGenerator:
     """CC 매핑 매트릭스 + 누락 요구사항 설명 포함 최종 JSON 생성"""
@@ -913,9 +886,7 @@ class StructuredOutputGenerator:
         return output
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # 메인 파이프라인 오케스트레이터
-# ─────────────────────────────────────────────────────────────────────────────
 
 class AIHarnessPipeline:
     """전체 파이프라인 실행"""
@@ -1001,9 +972,7 @@ class AIHarnessPipeline:
         return output
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # 샘플 STT 입력 데이터
-# ─────────────────────────────────────────────────────────────────────────────
 
 SAMPLE_STT_INPUT = """
 보안 요구사항 회의록 - 2024년 시스템 보안 검토 회의
@@ -1024,9 +993,7 @@ SAMPLE_STT_INPUT = """
 """
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # 메인 실행
-# ─────────────────────────────────────────────────────────────────────────────
 
 def main():
     pipeline = AIHarnessPipeline()
